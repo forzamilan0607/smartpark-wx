@@ -77,7 +77,7 @@
     }
 
     methods = {
-      // 授权
+      // 授权OK
       approve (id) {
         console.log(id)
       },
