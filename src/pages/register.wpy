@@ -1,0 +1,243 @@
+<style lang="less">
+  @color: #00479D;
+
+  page {
+    background-color: #fff;
+  }
+  .main {
+    padding: 100rpx 40rpx 0rpx;
+    background-color: #fff;
+
+    >.imgView {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 180rpx;
+      text-align: center;
+
+      >.logoImg {
+        width: 300rpx;
+        height: 86rpx;
+      }
+
+      >.operateImg {
+        width: 72rpx;
+        height: 34rpx;
+        margin-left: 10rpx;
+      }
+    }
+
+    .login-icon {
+      width:40rpx;
+      height:50rpx;
+    }
+
+    input{
+      font-size:32rpx; 
+    }
+
+    .login-btn{
+      margin-top:60rpx;
+      margin-bottom:44rpx;
+      color:#fff;
+      height:100rpx;
+      line-height:100rpx;
+      background:linear-gradient(to right,#00479D 50%, rgba(233,72,22,1) 100%);
+      border-radius:8px;
+      border:none;
+    }
+  }
+
+  .code {
+    font-size: 14px;
+    color: #00479D;
+    padding-top: 10rpx;
+    margin-top: 20rpx;
+    text-align: center;
+    border-left: 1px solid #00479D;
+  }
+
+  .inputGroup {
+    display: felx;
+    flex-direction: row;
+    align-items: center;
+    padding: 20rpx;
+    border-bottom: 1px solid #eee;
+  }
+  .imageCol {
+    flex: 1;
+    padding-top: 20rpx;
+  }
+  .inputinput {
+    display: inline-block;
+    padding-left: 20rpx;
+  }
+  .getCode {
+    font-size: 14px;
+    color: #666;
+  }
+</style>
+
+<template>
+  <view class="main">
+
+    <view class="imgView">
+      <image src="../assets/images/logo.png" class="logoImg"/>
+    </view>
+
+    <view class="inputGroup">
+      <image class="login-icon" src="../assets/images/icon_sj.png"/>
+      <input class="inputinput" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone"></input>
+    </view>
+
+    <view class="inputGroup">
+      <image class="login-icon" src="../assets/images/icon_yzm.png"/>
+      <input class="inputinput" value="{{ password }}" type="password" password="true" maxlength="-1" placeholder="请输入密码" bind:change="bindPassword"></input>
+    </view>
+
+    <view class="inputGroup">
+      <image class="login-icon" src="../assets/images/icon_yzm.png"/>
+      <input class="inputinput" value="{{ verifyCode }}" type="password" password="true" maxlength="-1" placeholder="请输入验证码" bind:change="bindCode"></input>
+      <text class="getCode" @tap="getCode">{{text}}验证码</text>
+    </view>
+
+    <button class="login-btn" @tap="login">注册</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+  import api from '../mixins/api'
+
+  export default class register extends wepy.page {
+    config = {
+      navigationBarTitleText: '注册',
+      navigationBarBackgroundColor: '#00479D',
+      navigationBarTextStyle: 'white'
+    }
+
+    data = {
+      telPhone: '',
+      password: '',
+      verifyCode: '',
+      time: '',
+      text: '发送',
+      flag: false
+    }
+
+    mixins = [utilMixin, toastMixin, api]
+
+    methods = {
+      login () {
+        // 先判断
+        if (!this.checkPhone(this.telPhone)) {
+          this.selfToast('请输入正确的手机号!', 'none', 2000)
+          return false
+        }
+        if (!this.password) {
+          this.selfToast('请输入密码!', 'none', 2000)
+          return false
+        }
+        if (!this.verifyCode) {
+          this.selfToast('请输入验证码!', 'none', 2000)
+          return false
+        }
+        const openId = wepy.getStorageSync('openid')
+        this.registerNum(this.telPhone, this.password, this.verifyCode, openId).then(res => {
+          console.log(res)
+          // 存储token, menus
+          // wepy.setStorageSync('token', res.data.token)
+          // wepy.setStorageSync('menus', res.data.menus)
+          if (res.data.code === 200) {
+            this.$redirect({
+              url: './login'
+            })
+          }
+        })
+      },
+
+      code() {
+        let that = this
+        if (that.flag) {
+          return false
+        }
+        that.flag = true
+        that.time = 60
+        that.font = '秒重新发送'
+        let count = setInterval(() => {
+          if (that.time === 0) {
+            clearInterval(count)
+            that.time = ''
+            that.font = '发送验证码'
+            that.flag = false
+            that.$apply()
+            return false
+          }
+          that.time --
+          that.$apply()
+        }, 1000)
+      },
+
+      // 倒计时
+      bindTelPhone(e) {
+        this.telPhone = e.detail.value
+        this.$apply()
+      },
+
+      bindPassword(e) {
+        this.password = e.detail.value
+        this.$apply()
+      },
+
+      bindCode(e) {
+        this.verifyCode = e.detail.value
+        this.$apply()
+      },
+
+      // getCode
+      getCode () {
+        let that = this
+        if (that.text === '发送') {
+          // 先验证手机号是否正确
+          const mobile = that.telPhone
+          console.log(mobile)
+          if (!that.checkPhone(mobile)) {
+            that.selfToast('请输入正确的手机号', 'none')
+            return false
+          }
+          that.getVerifyCode(mobile, 'SMS_150182159').then(res => {
+            if (res.data.code === 200) {
+              that.selfToast('验证码发送成功', 'success')
+              let num = 60
+              let inter = setInterval(function () {
+                if (num === 1) {
+                  that.text = '发送'
+                  that.$apply()
+                  clearInterval(inter)
+                } else {
+                  num--
+                  that.text = `${num}后发`
+                  that.$apply()
+                }
+              }, 1000)
+            }
+          })
+        }
+      }
+    }
+
+    watch = {
+      // 监听time的值
+    }
+
+    onLoad() {
+      if (wepy.getStorageSync('token')) {
+        this.$redirect({
+          url: './index'
+        })
+      }
+    }
+  }
+</script>

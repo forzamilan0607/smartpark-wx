@@ -1,0 +1,136 @@
+<style lang="less">
+@color: #FF5D22;
+page {
+  background-color: #f7f7f7;
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+import { setStore } from 'wepy-redux'
+import configStore from './store'
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/register',
+      'pages/index',
+      'pages/myOrder',
+      'pages/visitorOrder',
+      'pages/orderAuthorize',
+      'pages/login'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+    this.testAsync()
+    wx.login({
+      success (data) {
+        console.log(data)
+        if (data.code) {
+          // 发起网络请求
+          console.log(data.code)
+          const appid = 'wx2543cd2140b815b1'
+          const secret = '2b530219c5266ffe918650556b74889c'
+
+          wepy.request({
+            url: `https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code=${data.code}&&grant_type=authorization_code`,
+            methods: 'POST',
+            success: res => {
+              console.log(res)
+              wepy.setStorageSync('openid', res.data.openid)
+              // 如果有openid 那么直接登录
+              if (res.data.openid) {
+                wepy.request({
+                  url: `http://47.99.125.173:8087/app/appEnter?openId=${res.data.openid}`,
+                  // url: `http://192.168.3.183:8087/app/appEnter?openId=${res.data.openid}`,
+                  success: res => {
+                    console.log(res, 2222)
+                    if (res.data.code === 500) {
+                      return false
+                    }
+                    if (res.data.code === 510) {
+                      wx.redirectTo({
+                        url: './register'
+                      })
+                    }
+                    wepy.setStorageSync('token', res.data.token)
+                    wepy.setStorageSync('menus', res.data.menus)
+                    wx.redirectTo({
+                      url: './index'
+                    })
+                  },
+                  fail: res => {
+                  }
+                })
+              }
+            },
+            fail: err => {
+              console.log(err)
+            },
+            complete: res => {
+
+            }
+          })
+        } else {
+          console.log('登录失败！' + data.errMsg)
+        }
+      }
+    })
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

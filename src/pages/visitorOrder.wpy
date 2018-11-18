@@ -1,0 +1,449 @@
+<style lang="less">
+  .main {
+    padding: 10rpx 20rpx;
+    background-color: #fff;
+  }
+  .inputGroup {
+    display: flex;
+    padding: 18rpx;
+    border-bottom: 1px solid #f4f4f4;
+    text {
+      flex: 1;
+      font-size: 14px;
+      text-align: right;
+      height: 50rpx;
+      line-height: 50rpx;
+    }
+    .input {
+      flex: 2;
+      font-size: 14px;
+    }
+    switch {
+      flex: 2;
+    }
+    .mobileInput {
+      flex: 4;
+    }
+    .getCode {
+      flex: 2;
+      font-size: 12px;
+      color: #00479D;
+      border-left: 1px solid #eee;
+    }
+    .mobile {
+      flex: 3;
+    }
+    .pick {
+      flex: 2;
+      .picker {
+        font-size: 14px;
+        color: #666;
+        height: 1.4rem;
+        line-height: 1.4rem;
+        min-height: 1.4rem;
+      }
+    }
+  }
+
+  .mark {
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #00000080;
+    .searchView {
+      z-index: 111;
+      padding: 40rpx;
+      width: 70%;
+      border-radius: 20rpx;
+      background-color: #fff;
+      margin: 300rpx auto;
+      input {
+        border-bottom: 1px solid #f4f4f4;
+        width: 100%;
+        font-size: 14px;
+        text-align: center;
+        color: #666;
+      }
+      .basestaff {
+        margin-top: 20rpx;
+        font-size: 14px;
+        text-align: center;
+        color: #333;
+        line-height: 60rpx;
+      }
+    }
+  }
+
+  .choose {
+    background:linear-gradient(to right,#00479D 50%, rgba(233,72,22,1) 100%);
+    height: 50rpx;
+    line-height: 50rpx;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+    border-radius: 10rpx;
+    width: 50%;
+    margin: 40rpx auto;
+  }
+
+  .carCard {
+    border: 1px dashed #f4f4f4;
+  }
+
+</style>
+
+<template>
+  <view class="main">
+    <view class="inputGroup">
+      <text>被访人：</text>
+      <input class="input" value="{{form.staffName}}" placeholder="必填" bindfocus="bindfocus"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>姓名：</text>
+      <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text class="mobile">身份证：</text>
+      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')"/>
+      <text class="getCode" @tap="photo">点击拍照</text>
+    </view>
+
+    <view class="inputGroup">
+      <text class="mobile">手机号：</text>
+      <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')"/>
+      <text class="getCode" @tap="getCode">{{text}}验证码</text>
+    </view>
+
+    <view class="inputGroup">
+      <text>验证码：</text>
+      <input class="input" placeholder="必填" value="{{form.verifyCode}}" bindinput="bindInput('verifyCode')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访开始时间：</text>
+      <view class="pick">      
+        <picker mode="date" value="{{form.appointStartTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindDateChange">
+          <view class="picker">
+            {{form.appointStartTime}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访开始时间：</text>
+      <view class="pick">      
+        <picker mode="date" value="{{form.appointEndTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindEndDateChange">
+          <view class="picker">
+            {{form.appointEndTime}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访事由：</text>
+      <input class="input" placeholder="选填" value="{{remark}}" bindinput="bindInput('remark')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访人数：</text>
+      <input class="input" placeholder="必填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>是否添加车辆：</text>
+      <switch checked bindchange="switchChange"/>
+    </view>
+
+    <view class="carCard" wx:if="{{carCard}}">
+      <view class="inputGroup">
+        <text>车牌号：</text>
+        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.carNo}}" bindinput="bindInputCar('carNo')"/>
+      </view>
+      <view class="inputGroup">
+        <text>驾驶员：</text>
+        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.name}}" bindinput="bindInputCar('name')"/>
+      </view>
+      <view class="inputGroup">
+        <text>手机号：</text>
+        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.phone}}" bindinput="bindInputCar('phone')"/>
+      </view>
+      <!-- <view class="inputGroup">
+        <text>与访客一致：</text>
+        <switch checked bindchange="switchChangeCar"/>
+      </view> -->
+    </view>
+    
+    <!-- mark -->
+    <view class="mark" wx:if="{{search}}" @tap="mark">
+      <view class="searchView" catchtap="catch">
+        <input value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
+        <view class="basestaff" wx:if="{{basetype}}">
+          <text>员工信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
+        </view>
+        <view class="choose" wx:if="{{basetype}}" catchtap="choose">选择</view>
+      </view>
+    </view>
+
+    <view class="choose" @tap="submit">提交预约</view>
+
+    <!-- <camera wx:if="{{camera}}" device-position="back" binderror="error" style="width:80%;height:200px;position:fixed;top:100px;left:54rpx;z-index:1000;padding:10px;"></camera> -->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+  import api from '../mixins/api'
+
+  export default class visitorOrder extends wepy.page {
+    config = {
+      navigationBarTitleText: '访客预约',
+      navigationBarBackgroundColor: '#00479D',
+      navigationBarTextStyle: 'white'
+    }
+
+    mixins = [api, toastMixin, utilMixin]
+    data = {
+      searchMobile: '', // 手机号搜索时
+      search: false,
+      camera: false,
+      startDay: '',     // 日期选择器开始时间
+      text: '发送',
+      form: {
+        name: '',               // 访客姓名
+        phone: '',              // 访客手机号
+        staffName: '',          // 受访者姓名
+        staffPhone: '',         // 受访者手机号
+        verifyCode: '',         // 验证码
+        isAddCarInfo: '',       // 是否添加同行车辆
+        companions: '',         // 同行人数
+        idcardNo: '',           // 访客身份证号码
+        remark: '',             // 访客事由
+        appointStartTime: '',   // 开始时间
+        appointEndTime: '',     // 结束时间
+        visitorIdcardEntity: {         // 访客身份信息表
+          address: '',                 // 访客身份信息表
+          effDate: '',                 // 证件生效时间
+          expDate: '',                 // 证件失效时间
+          id: '',                      // 身份信息表id
+          idcardNo: '',                // 身份证号
+          idcardPhotoUrl: '',          // 身份证照片地址
+          issuOrganization: '',        // 签发机关
+          name: '',                    // 姓名
+          sex: '',                     // 性别 1 2
+          visitorId: ''                // 访客id
+        },
+        carInfoEntitys: {              // 车辆信息集合
+          carNo: '',                   // 车牌号
+          name: '',                    // 驾驶员姓名
+          phone: ''                    // 驾驶员手机号
+        }
+      },
+      basestaff: {},    // 员工信息
+      basetype: false,  // 判断是否展示员工信息栏
+      carCard: true     // 开关
+    }
+
+    methods = {
+      // input
+      bindInput (val, e) {
+        console.log(e, val)
+        console.log(val)
+        this.form[val] = e.detail.value
+        this.$apply()
+        console.log(this.form[val])
+      },
+
+      bindInputCar (val, e) {
+        console.log(e, val)
+        console.log(val)
+        this.form.carInfoEntitys[val] = e.detail.value
+        this.$apply()
+        console.log(this.form.carInfoEntitys[val])
+      },
+
+      // choose
+      choose () {
+        console.log('点到了')
+        let that = this
+        that.search = false
+        that.form.staffPhone = that.basestaff.mobile
+        that.form.staffName = that.basestaff.username
+        that.$apply()
+        console.log(that.form.staffPhone)
+        console.log(that.form.staffName)
+      },
+
+      // textarea
+      bindArea (e) {
+        console.log(e.detail.value)
+      },
+
+      // getCode
+      getCode () {
+        let that = this
+        if (that.text === '发送') {
+          // 先验证手机号是否正确
+          const mobile = that.form.phone
+          console.log(mobile)
+          if (!that.checkPhone(mobile)) {
+            that.selfToast('请输入正确的手机号', 'none')
+            return false
+          }
+          that.getVerifyCode(mobile, 'SMS_150172084').then(res => {
+            if (res.data.code === 200) {
+              that.selfToast('验证码发送成功', 'success')
+              let num = 60
+              let inter = setInterval(function () {
+                if (num === 1) {
+                  that.text = '发送'
+                  that.$apply()
+                  clearInterval(inter)
+                } else {
+                  num--
+                  that.text = `${num}后发`
+                  that.$apply()
+                }
+              }, 1000)
+            }
+          })
+        }
+      },
+
+      // photo
+      photo () {
+        let that = this
+        that.camera = true
+        that.$apply()
+        const CameraContext = wx.createCameraContext()
+        CameraContext.takePhoto({
+          quality: 'high',
+          success: res => {
+            console.log(res)
+          }
+        })
+      },
+
+      // chooseDate
+      bindDateChange (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.form.appointStartTime = e.detail.value
+        this.$apply()
+      },
+
+      // chooseDate
+      bindEndDateChange (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.form.appointEndTime = e.detail.value
+        this.$apply()
+      },
+
+      checkMobile (e) {
+        let that = this
+        console.log(e.detail.value.length)
+        if (e.detail.value.length === 11) {
+          if (that.checkPhone(e.detail.value)) {
+            that.queryByMobile(e.detail.value).then(res => {
+              console.log(res, '员工信息')
+              if (res.data.data) {
+                that.basetype = true
+                that.basestaff = res.data.data
+                that.$apply()
+              }
+            })
+          }
+        } else {
+          that.basetype = false
+          that.$apply()
+        }
+      },
+
+      // focus
+      bindfocus (e) {
+        this.search = true
+        this.$apply()
+      },
+
+      // tap mark
+      mark () {
+        this.search = false
+        this.$apply()
+      },
+
+      // default tap
+      catch () {
+        console.log('阻止事件冒泡')
+      },
+
+      // switchChange
+      switchChange (e) {
+        console.log('switch1 发生 change 事件，携带值为', e.detail.value)
+        this.carCard = e.detail.value
+        this.$apply()
+      },
+
+      // 提交
+      submit () {
+        let that = this
+        // param
+        console.log(that.carCard)
+        const openId = wepy.getStorageSync('openid')
+        let param = {
+          // 被访人姓名，电话
+          staffName: that.form.staffName,
+          staffPhone: that.form.staffPhone,
+          staffId: that.basestaff.id,
+          name: that.form.name,
+          phone: that.form.phone,
+          remark: that.form.remark || '',
+          isAddCarInfo: that.carCard ? 1 : 0,
+          appointEndTime: `${that.form.appointEndTime} 00:00:00:000`,
+          appointStartTime: `${that.form.appointStartTime} 00:00:00:000`,
+          companions: that.form.companions,
+          idcardNo: that.form.idcardNo,
+          verifyCode: that.form.verifyCode,
+          openId: openId
+        }
+        console.log(that.carCard)
+        console.log(that.form.carInfoEntitys)
+        if (that.carCard) {
+          param.carInfoEntitys = []
+          param.carInfoEntitys.push(that.form.carInfoEntitys)
+          console.log(param.carInfoEntitys)
+        }
+        console.log(param)
+        that.saveVisitor(param).then(res => {
+          console.log(res, '保存预约')
+          if (res.data.code === 200) {
+            that.$redirect({
+              url: './myOrder'
+            })
+          }
+        })
+      }
+    }
+
+    onLoad () {
+
+    }
+
+    onShow () {
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      console.log(year)
+      console.log(month)
+      console.log(day)
+      this.startDay = `${year}-${month}-${day}`
+    }
+  }
+</script>

@@ -1,0 +1,44 @@
+<style lang="less">
+
+</style>
+
+<template>
+	<view>
+		<i-grid wx:for="{{ menus }}" wx:key="index" index="index" item="item">
+			<i-grid-item>{{ item.name }}</i-grid-item>
+		</i-grid>
+	</view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+	import api from '../mixins/api'
+	
+	export default class Menus extends wepy.page {
+		config = {
+			navigationBarTitleText: '首页'
+		}
+
+		data = {
+			menus: []
+		}
+
+		methods = {
+
+		}
+
+		onLoad() {
+			this.menus = wepy.getStorageSync('menus')
+			this.$apply()
+			console.log(menus)	
+		}
+
+		onShow() {
+			this.menus = wepy.getStorageSync('menus')
+			this.$apply()
+			console.log(menus)
+		}
+	}
+</script>
