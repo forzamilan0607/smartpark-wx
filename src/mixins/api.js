@@ -1,8 +1,8 @@
 import wepy from 'wepy'
 // import toast from './toast'
 // const devUrl = 'http://47.99.125.173:3000/mock/14/'
-const devUrl = 'http://192.168.3.182:8087/'
-// const devUrl = 'http://47.99.125.173:8087/'
+// const devUrl = 'http://192.168.3.182:8087/'
+const devUrl = 'http://47.99.125.173:8087/'
 
 export default class Api extends wepy.mixin {
   /**

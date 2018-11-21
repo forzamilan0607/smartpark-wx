@@ -31,7 +31,9 @@ export default class extends wepy.app {
       'pages/myOrder',
       'pages/visitorOrder',
       'pages/orderAuthorize',
-      'pages/login'
+      'pages/login',
+      'pages/orderInfo',
+      'pages/doorList'
     ],
     window: {
       backgroundTextStyle: 'light',

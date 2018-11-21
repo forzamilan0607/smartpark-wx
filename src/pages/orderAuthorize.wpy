@@ -42,7 +42,6 @@
       <view>访客手机号：{{item.visitorMobile}}</view>
       <view class="first">来访事由：{{item.remark}} </view>
       <view class="bottom">
-        <view @tap="approve('{{item.id}}')">审核</view>
         <view @tap="notApprove('{{item.id}}')">查看</view>
       </view>
     </view>
@@ -103,9 +102,12 @@
         })
       },
 
-      // 拒绝
+      // 查看
       notApprove (id) {
         console.log(id)
+        this.$navigate({
+          url: `./orderInfo?id=${id}`
+        })
       }
 
       // tap (id) {
