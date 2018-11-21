@@ -114,7 +114,7 @@
     <!-- main -->
     <view class="main">
       <view class="menu" @tap="sub('{{item.url}}')" wx:for="{{menus}}" wx:key="{{url}}">
-        <image src="../assets/images/icon_sys.png" />
+        <image src="../assets/images/{{item.icon}}" />
         <text>{{item.name}}</text>
       </view>
     </view>
