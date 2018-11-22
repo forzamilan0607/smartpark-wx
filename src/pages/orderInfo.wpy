@@ -105,50 +105,32 @@
 <template>
 <view class="main">
   <view class="inputGroup">
-  <text>访客姓名：</text>
-<input class="input" placeholder="必填" value="{{form.name}}" disabled bindinput="bindInput('name')"/>
+    <text>被访人姓名：</text>
+    <input class="input" placeholder="必填" value="{{form.staffName}}" disabled bindinput="bindInput('name')"/>
+  </view>
+  <view class="inputGroup">
+    <text>访客姓名：</text>
+    <input class="input" placeholder="必填" value="{{form.name}}" disabled bindinput="bindInput('name')"/>
   </view>
 
   <view class="inputGroup">
-  <text>身份证：</text>
-<input class="input" placeholder="必填" value="{{form.idcardNo}}" disabled bindinput="bindInput('idcardNo')"/>
+    <text>身份证：</text>
+    <input class="input" placeholder="必填" value="{{form.idcardNo}}" disabled bindinput="bindInput('idcardNo')"/>
   <!-- <text class="getCode" @tap="photo">点击拍照</text> -->
   </view>
 
   <view class="inputGroup">
-  <text>手机号：</text>
-<input class="input" placeholder="必填" value="{{form.phone}}" disabled bindinput="bindInput('phone')"/>
+    <text>手机号：</text>
+    <input class="input" placeholder="必填" value="{{form.phone}}" disabled bindinput="bindInput('phone')"/>
   <!-- <text class="getCode">{{text}}验证码</text> -->
-</view>
+  </view>
 
-<!-- <view class="inputGroup">
-  <text>来访开始时间：</text>
-<view class="pick">
-  <picker mode="date" value="{{form.appointStartTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindDateChange">
-  <view class="picker">
-  {{form.appointStartTime}}
-</view>
-</picker>
-</view>
-</view>
-
-<view class="inputGroup">
-  <text>来访开始时间：</text>
-<view class="pick">
-  <picker mode="date" value="{{form.appointEndTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindEndDateChange">
-  <view class="picker">
-  {{form.appointEndTime}}
-</view>
-</picker>
-</view>
-</view> -->
-
-<view class="inputGroup">
-  <text>来访开始时间：</text>
-<view class="pick">
-  <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
-bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}</picker>
-</view>
+  <view class="inputGroup">
+    <text>来访开始时间：</text>
+  <view class="pick">
+    <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
+  bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}</picker>
+  </view>
 </view>
 
 <view class="inputGroup">
@@ -161,7 +143,7 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
 
 <view class="inputGroup">
   <text>来访事由：</text>
-<input class="input" placeholder="选填" value="{{form.remark}}" bindinput="bindInput('remark')"/>
+<input class="input" placeholder="选填" disabled value="{{form.remark}}" bindinput="bindInput('remark')"/>
   </view>
 
   <view class="inputGroup">
@@ -176,15 +158,15 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
   <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
   <view class="inputGroup">
   <text>车牌号：</text>
-<input class="input" placeholder="必填" type="number" value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
+<input class="input" placeholder="必填" type="number" disabled  value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
   </view>
   <view class="inputGroup">
   <text>驾驶员：</text>
-<input class="input" placeholder="必填" type="number" value="{{item.name}}" bindinput="bindInputCar('name')"/>
+<input class="input" placeholder="必填" disabled type="number" value="{{item.name}}" bindinput="bindInputCar('name')"/>
   </view>
   <view class="inputGroup">
   <text>手机号：</text>
-<input class="input" placeholder="必填" type="number" value="{{item.phone}}" bindinput="bindInputCar('phone')"/>
+<input class="input" placeholder="必填" disabled type="number" value="{{item.phone}}" bindinput="bindInputCar('phone')"/>
   </view>
   <!-- <view class="inputGroup">
   <text>与访客一致：</text>
@@ -216,7 +198,7 @@ import api from '../mixins/api'
 
 export default class OrderInfo extends wepy.page {
   config = {
-    navigationBarTitleText: '预约单审核',
+    navigationBarTitleText: '预约单详情',
     navigationBarBackgroundColor: '#00479D',
     navigationBarTextStyle: 'white'
   }

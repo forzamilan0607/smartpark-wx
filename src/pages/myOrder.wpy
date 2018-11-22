@@ -43,10 +43,10 @@
       <view>来访开始时间：{{item.appointStartTime}}</view>
       <view>来访结束时间：{{item.appointEndTime}}</view>
       <view class="first">来访事由：{{item.remark}} </view>
-      <!-- <view class="bottom">
-        <view @tap="approve('{{item.id}}')">授权</view>
-        <view @tap="notApprove('{{item.id}}')">拒绝</view>
-      </view> -->
+      <view class="bottom">
+        <!-- <view @tap="approve('{{item.id}}')">授权</view> -->
+        <view @tap="notApprove('{{item.id}}')">查看</view>
+      </view>
     </view>
   </view>
   <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">暂无预约单！</view>
@@ -80,14 +80,11 @@
     }
 
     methods = {
-      // 授权OK
-      approve (id) {
-        console.log(id)
-      },
-
-      // 拒绝
+      // 查看
       notApprove (id) {
-        console.log(id)
+        this.$navigate({
+          url: `./orderInfo?id=${id}&type=1`
+        })
       },
 
       tap (id) {
