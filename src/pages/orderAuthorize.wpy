@@ -40,6 +40,8 @@
       <view class="first"><text>状态：{{item.status === "1" ? '待审批' : item.status === "2" ? '被拒绝' : item.status === "3" ? '已审批' : item.status === "4" ? '待激活' : item.status === "5" ? '已完成' : '已过期'}}</text></view>
       <visew>访客姓名：{{item.visitorName}}</visew>
       <view>访客手机号：{{item.visitorMobile}}</view>
+      <view>来访开始时间：{{item.appointStartTime}}</view>
+      <view>来访结束时间：{{item.appointEndTime}}</view>
       <view class="first">来访事由：{{item.remark}} </view>
       <view class="bottom">
         <view wx:if="{{item.status !== '1'}}" @tap="notApprove('{{item.id}}', '2')">查看</view>
