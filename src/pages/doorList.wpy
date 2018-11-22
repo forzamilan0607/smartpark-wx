@@ -24,6 +24,9 @@
     display: inline-block;
     margin-left: 11%;
   }
+  .item {
+    padding-left: 20rpx;
+  }
 </style>
 
 <template>
@@ -31,6 +34,14 @@
     <checkbox-group bindchange="checkboxChange">
       <label class="checkbox" wx:for="{{list}}" wx:key="{{item.nodeId}}">
         <checkbox value="{{item.nodeId}}" checked="{{item.extValue}}"/>{{item.nodeName}}
+
+          <label class="checkbox item" wx:for="{{item.children}}" wx:key="{{item.nodeId}}">
+            <checkbox value="{{item.nodeId}}" checked="{{item.extValue}}"/>{{item.nodeName}}
+
+              <label class="checkbox item" wx:for="{{item.children}}" wx:key="{{item.nodeId}}">
+                <checkbox value="{{item.nodeId}}" checked="{{item.extValue}}"/>{{item.nodeName}}
+              </label>
+          </label>
       </label>
     </checkbox-group>
     <view class="choose" catchtap="sure">确认</view>

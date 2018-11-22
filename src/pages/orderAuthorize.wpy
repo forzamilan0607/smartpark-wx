@@ -42,7 +42,8 @@
       <view>访客手机号：{{item.visitorMobile}}</view>
       <view class="first">来访事由：{{item.remark}} </view>
       <view class="bottom">
-        <view @tap="notApprove('{{item.id}}')">查看</view>
+        <view wx:if="{{item.status !== '1'}}" @tap="notApprove('{{item.id}}', '2')">查看</view>
+        <view wx:if="{{item.status === '1'}}" @tap="notApprove('{{item.id}}')">审核</view>
       </view>
     </view>
   </view>
@@ -76,37 +77,16 @@
     }
 
     methods = {
-      // 授权
-      approve (id) {
-        console.log(id)
-        let that = this
-        const openId = wepy.getStorageSync('openid')
-        that.getDoorNodes(openId).then(res => {
-          console.log(res, '门禁信息')
-          if (res.data.code === 500) {
-            that.selfToast(res.data.msg, 'none')
-            return false
-          } else if (res.data.code === 200) {
-            let param = {
-              reservationId: id, // 预约单ID
-              approveReslut: 1,
-              openId: openId,
-              doorList: [res.data.data[0].nodeId, res.data.data[1].nodeId],
-              actStartTime: '2018-11-22 09:00:00:000',
-              actEndTime: '2018-11-22 17:00:00:000'
-            }
-            that.approve(param).then(res => {
-              console.log(res, '授权')
-            })
-          }
-        })
-      },
-
       // 查看
-      notApprove (id) {
-        console.log(id)
+      notApprove (id, type) {
+        console.log(type)
+        if (type) {
+          this.$navigate({
+            url: `./orderInfo?id=${id}&type=2`
+          })
+        }
         this.$navigate({
-          url: `./orderInfo?id=${id}&type=2`
+          url: `./orderInfo?id=${id}`
         })
       }
 

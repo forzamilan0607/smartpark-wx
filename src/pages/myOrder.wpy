@@ -47,7 +47,7 @@
       </view> -->
     </view>
   </view>
-  <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">您还未创建预约单！</view>
+  <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">暂无预约单！</view>
 </template>
 
 <script>

@@ -200,8 +200,8 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
   </view>
   </view>
 
-  <view class="choose" @tap="submit">授权</view>
-  <view class="choose" @tap="reject">拒绝</view>
+  <view class="choose" @tap="submit" wx:if="{{!type}}">授权</view>
+  <view class="choose" @tap="reject" wx:if="{{!type}}">拒绝</view>
 
   <!-- <camera wx:if="{{camera}}" device-position="back" binderror="error" style="width:80%;height:200px;position:fixed;top:100px;left:54rpx;z-index:1000;padding:10px;"></camera> -->
   </view>
@@ -223,6 +223,7 @@ export default class OrderInfo extends wepy.page {
 
   mixins = [api, toastMixin, utilMixin]
   data = {
+    type: '',
     curDate: new Date(),
     currentHours: null,
     currentMinute: null,
@@ -393,6 +394,7 @@ export default class OrderInfo extends wepy.page {
   onLoad (options) {
     console.log(options, 'options')
     this.id = options.id
+    this.type = options.type || false
     this.$apply()
   }
 
