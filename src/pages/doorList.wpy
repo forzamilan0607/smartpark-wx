@@ -82,15 +82,15 @@
           rejectReaon: '',
           openId: openId,
           doorList: that.doorList,
-          actStartTime: that.start,
-          actEndTime: that.end
+          actStartTime: that.start.length === 16 ? that.start + ':00:000' : that.start + ':000',
+          actEndTime: that.end.length === 16 ? that.end + ':00:000' : that.end + ':000'
         }
         console.log(param, 'param')
         that.approve(param).then(res => {
           if (res.data.code === 200) {
             that.selfToast('授权成功', 'success')
             setTimeout(that.$navigate({
-              url: './myOrder'
+              url: './index'
             }), 1000)
           }
         })

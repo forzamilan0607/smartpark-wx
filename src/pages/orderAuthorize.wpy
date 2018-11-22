@@ -106,7 +106,7 @@
       notApprove (id) {
         console.log(id)
         this.$navigate({
-          url: `./orderInfo?id=${id}`
+          url: `./orderInfo?id=${id}&type=2`
         })
       }
 
