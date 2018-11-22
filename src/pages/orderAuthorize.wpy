@@ -82,13 +82,13 @@
       // 查看
       notApprove (id) {
         this.$navigate({
-          url: `./orderInfo?id=${id}&type=1`
+          url: `./orderInfo?id=${id}&type=1&title=title`
         })
       },
 
       Approve (id) {
         this.$navigate({
-          url: `./orderInfo?id=${id}`
+          url: `./orderInfo?id=${id}&title=title`
         })
       }
 

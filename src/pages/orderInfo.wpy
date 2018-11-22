@@ -125,7 +125,7 @@
   <!-- <text class="getCode">{{text}}验证码</text> -->
   </view>
 
-  <view class="inputGroup">
+  <view class="inputGroup" wx:if="{{!type}}">
     <text>来访开始时间：</text>
   <view class="pick">
     <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
@@ -133,12 +133,22 @@
   </view>
 </view>
 
-<view class="inputGroup">
+<view class="inputGroup" wx:if="{{!type}}">
   <text>来访结束时间：</text>
 <view class="pick">
   <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
 bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointEndTime}}</picker>
 </view>
+</view>
+
+<view class="inputGroup" wx:if="{{type}}">
+  <text>来访开始时间：</text>
+  <input class="input" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
+</view>
+
+<view class="inputGroup" wx:if="{{type}}">
+  <text>来访结束时间：</text>
+  <input class="input" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
 </view>
 
 <view class="inputGroup">
@@ -377,6 +387,11 @@ export default class OrderInfo extends wepy.page {
     console.log(options, 'options')
     this.id = options.id
     this.type = options.type || false
+    if (options.title) {
+      wepy.setNavigationBarTitle({
+        title: '预约单审批'
+      })
+    }
     this.$apply()
   }
 
