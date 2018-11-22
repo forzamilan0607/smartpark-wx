@@ -100,9 +100,11 @@
         that.approve(param).then(res => {
           if (res.data.code === 200) {
             that.selfToast('授权成功', 'success')
-            setTimeout(that.$navigate({
-              url: './index'
-            }), 1000)
+            setTimeout(function() {
+              that.$navigate({
+                url: './index'
+              })
+            }, 1000)
           }
         })
       },
@@ -134,7 +136,26 @@
             if (that.list[i].extValue) {
               that.doorList.push(that.list[i].nodeId)
             }
+            if (that.list[i].children) {
+              console.log(that.list[i].children)
+              for (let j = 0; j < that.list[i].children.length; j++) {
+                console.log(that.list[i].children[j].extValue)
+                if (that.list[i].children[j].extValue) {
+                  that.doorList.push(that.list[i].children[j].nodeId)
+                }
+                if (that.list[i].children[j].children) {
+                  if (that.list[i].children[j].children) {
+                    for (let k = 0; k < that.list[i].children[j].children.length; k++) {
+                      if (that.list[i].children[j].children[k].extValue) {
+                        that.doorList.push(that.list[i].children[j].children[k].nodeId)
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
+          console.log(that.doorList)
           that.$apply()
         }
       })

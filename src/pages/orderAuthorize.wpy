@@ -42,8 +42,8 @@
       <view>访客手机号：{{item.visitorMobile}}</view>
       <view class="first">来访事由：{{item.remark}} </view>
       <view class="bottom">
-        <view wx:if="{{item.status !== '1'}}" @tap="notApprove('{{item.id}}', '2')">查看</view>
-        <view wx:if="{{item.status === '1'}}" @tap="notApprove('{{item.id}}')">审核</view>
+        <view wx:if="{{item.status !== '1'}}" @tap="notApprove('{{item.id}}')">查看</view>
+        <view wx:if="{{item.status === '1'}}" @tap="Approve('{{item.id}}')">审核</view>
       </view>
     </view>
   </view>
@@ -78,13 +78,13 @@
 
     methods = {
       // 查看
-      notApprove (id, type) {
-        console.log(type)
-        if (type) {
-          this.$navigate({
-            url: `./orderInfo?id=${id}&type=2`
-          })
-        }
+      notApprove (id) {
+        this.$navigate({
+          url: `./orderInfo?id=${id}&type=1`
+        })
+      },
+
+      Approve (id) {
         this.$navigate({
           url: `./orderInfo?id=${id}`
         })
