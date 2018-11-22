@@ -166,12 +166,12 @@
 
     <view class="inputGroup">
       <text>来访事由：</text>
-      <input class="input" placeholder="选填" value="{{remark}}" bindinput="bindInput('remark')"/>
+      <input class="input" placeholder="必填" value="{{remark}}" bindinput="bindInput('remark')"/>
     </view>
 
     <view class="inputGroup">
       <text>来访人数：</text>
-      <input class="input" placeholder="必填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
+      <input class="input" placeholder="选填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
     </view>
 
     <view class="inputGroup">
@@ -444,6 +444,10 @@
         }
         if (!that.form.verifyCode) {
           that.selfToast('请输入验证码', 'none')
+          return false
+        }
+        if (!that.form.remark) {
+          that.selfToast('请输入来访事由', 'none')
           return false
         }
         // 校验时间
