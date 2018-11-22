@@ -421,6 +421,32 @@
         let that = this
         // param
         console.log(that.carCard)
+        // 校验
+        if (!that.form.staffName) {
+          that.selfToast('请先选择访客', 'nonoe')
+          return false
+        }
+        if (!that.form.name) {
+          that.selfToast('请输入姓名', 'nonoe')
+          return false
+        }
+        if (!that.form.phone) {
+          that.selfToast('请输入手机号', 'nonoe')
+          return false
+        }
+        if (!that.form.verifyCode) {
+          that.selfToast('请输入验证码', 'nonoe')
+          return false
+        }
+        if (!that.form.idcardNo) {
+          that.selfToast('请输入身份证号', 'nonoe')
+          return false
+        }
+        if (!that.form.companions) {
+          that.selfToast('请输入同行人数', 'nonoe')
+          return false
+        }
+
         const openId = wepy.getStorageSync('openid')
         let param = {
           // 被访人姓名，电话
@@ -431,8 +457,8 @@
           phone: that.form.phone,
           remark: that.form.remark || '',
           isAddCarInfo: that.carCard ? 1 : 0,
-          appointEndTime: that.form.appointEndTime + ':00:000',
-          appointStartTime: that.form.appointStartTime + ':00:000',
+          appointEndTime: that.form.appointEndTime,
+          appointStartTime: that.form.appointStartTime,
           companions: that.form.companions,
           idcardNo: that.form.idcardNo,
           verifyCode: that.form.verifyCode,
@@ -475,13 +501,13 @@
     }
 
     pickerTap () {
-      date = new Date()
+      let date = new Date()
       var monthDay = ['今天', '明天']
       var hours = []
       var minute = []
 
-      currentHours = date.getHours()
-      currentMinute = date.getMinutes()
+      let currentHours = date.getHours()
+      let currentMinute = date.getMinutes()
 
       // 月-日
       for (let i = 2; i <= 28; i++) {
@@ -522,8 +548,8 @@
       var hours = []
       var minute = []
 
-      currentHours = date.getHours()
-      currentMinute = date.getMinutes()
+      var currentHours = date.getHours()
+      var currentMinute = date.getMinutes()
 
       var data = {
         multiArray: this.data.multiArray,
