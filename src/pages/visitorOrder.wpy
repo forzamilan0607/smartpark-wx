@@ -423,30 +423,62 @@
         console.log(that.carCard)
         // 校验
         if (!that.form.staffName) {
-          that.selfToast('请先选择访客', 'nonoe')
+          that.selfToast('请先选择被访人', 'none')
           return false
         }
         if (!that.form.name) {
-          that.selfToast('请输入姓名', 'nonoe')
-          return false
-        }
-        if (!that.form.phone) {
-          that.selfToast('请输入手机号', 'nonoe')
-          return false
-        }
-        if (!that.form.verifyCode) {
-          that.selfToast('请输入验证码', 'nonoe')
+          that.selfToast('请输入访客姓名', 'none')
           return false
         }
         if (!that.form.idcardNo) {
-          that.selfToast('请输入身份证号', 'nonoe')
+          that.selfToast('请输入身份证号', 'none')
           return false
         }
-        if (!that.form.companions) {
-          that.selfToast('请输入同行人数', 'nonoe')
+        if (!that.form.phone) {
+          that.selfToast('请输入手机号', 'none')
           return false
         }
-
+        if (!that.checkPhone(that.form.phone)) {
+          that.selfToast('请输入正确的手机号', 'none')
+          return false
+        }
+        if (!that.form.verifyCode) {
+          that.selfToast('请输入验证码', 'none')
+          return false
+        }
+        // 校验时间
+        let appointStartTime = new Date(that.form.appointStartTime).getTime()
+        let appointEndTime = new Date(that.form.appointEndTime).getTime()
+        if (appointStartTime > appointEndTime) {
+          that.selfToast('结束时间必须大于开始时间', 'none')
+          return false
+        }
+        /*let diffTime = appointEndTime - appointStartTime
+        let leave1 = diffTime % (24 * 3600 * 1000)
+        let hours = Math.floor(leave1 / (3600 * 1000))
+        if (hours < 2) {
+          that.selfToast('结束时间和开始时间必须相差 2 小时以上', 'none', 'none')
+          return false
+        }*/
+        // 添加车牌信息，则需要校验必填项
+        if (that.carCard) {
+          if (!that.form.carInfoEntitys.carNo) {
+            that.selfToast('请输入车牌号', 'none')
+            return false
+          }
+          if (!that.form.carInfoEntitys.name) {
+            that.selfToast('请输入驾驶员姓名', 'none')
+            return false
+          }
+          if (!that.form.carInfoEntitys.phone) {
+            that.selfToast('请输入驾驶员手机号码', 'none')
+            return false
+          }
+          if (!that.checkPhone(that.form.carInfoEntitys.phone)) {
+            that.selfToast('请输入正确的手机号', 'none')
+            return false
+          }
+        }
         const openId = wepy.getStorageSync('openid')
         let param = {
           // 被访人姓名，电话
@@ -457,8 +489,8 @@
           phone: that.form.phone,
           remark: that.form.remark || '',
           isAddCarInfo: that.carCard ? 1 : 0,
-          appointEndTime: that.form.appointEndTime,
-          appointStartTime: that.form.appointStartTime,
+          appointEndTime: that.form.appointEndTime + ':00:000',
+          appointStartTime: that.form.appointStartTime + ':00:000',
           companions: that.form.companions,
           idcardNo: that.form.idcardNo,
           verifyCode: that.form.verifyCode,
@@ -486,6 +518,7 @@
     onLoad () {
       this.form.appointStartTime = this.addHour4CurDate(0)
       this.form.appointEndTime = this.addHour4CurDate(3)
+      this.form.companions = 0
     }
 
     addHour4CurDate (hours) {
@@ -495,8 +528,6 @@
       return date.getFullYear() + '-' + this.convertTime(date.getMonth() + 1) + '-' + this.convertTime(date.getDate()) +
               ' ' + this.convertTime(date.getHours()) + ':00'
     }
-
-
     onShow () {
     }
 
@@ -522,8 +553,8 @@
         multiIndex: this.data.multiIndex
       }
 
-      if(data.multiIndex[0] === 0) {
-        if(data.multiIndex[1] === 0) {
+      if (data.multiIndex[0] === 0) {
+        if (data.multiIndex[1] === 0) {
           this.loadData(hours, minute)
         } else {
           this.loadMinute(hours, minute)

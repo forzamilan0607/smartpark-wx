@@ -10,6 +10,20 @@ export default class util extends wepy.mixin {
     return true
   }
 
+  checkMobile (telNum) {
+    if (!telNum || !/^1[3|4|5|6|7|8][0-9]{9}$/.test(telNum)) {
+      return {
+        msg: '手机号码格式不正确',
+        result: false
+      }
+    } else {
+      return {
+        msg: 'SUCCESS',
+        result: true
+      }
+    }
+  }
+
   // 扫码
   shareCode () {
     let that = this
