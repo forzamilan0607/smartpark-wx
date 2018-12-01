@@ -1,7 +1,7 @@
 import wepy from 'wepy'
 // import toast from './toast'
 // const devUrl = 'http://47.99.125.173:3000/mock/14/'
-// const devUrl = 'http://192.168.3.182:8087/'
+// const devUrl = 'http://localhost:8087/'
 const devUrl = 'http://47.99.125.173:8087/'
 
 export default class Api extends wepy.mixin {
@@ -77,6 +77,20 @@ export default class Api extends wepy.mixin {
     return this.request('app/register', {
       mobile: phone,
       password: password,
+      verifyCode: verifyCode,
+      openId: openId
+    }, 'POST')
+  }
+
+  /**
+   * 登录或注册
+   * @param {手机号} phone
+   * @param {验证码} verifyCode
+   * @param {openId} openId
+   */
+  loginOrRegister (phone, verifyCode, openId) {
+    return this.request('app/loginOrRegister', {
+      mobile: phone,
       verifyCode: verifyCode,
       openId: openId
     }, 'POST')

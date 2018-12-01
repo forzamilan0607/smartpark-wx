@@ -318,7 +318,7 @@
           // 先验证手机号是否正确
           const mobile = that.form.phone
           console.log(mobile)
-          if (!that.checkPhone(mobile)) {
+          if (!that.checkMobile(mobile).result) {
             that.selfToast('请输入正确的手机号', 'none')
             return false
           }
@@ -374,7 +374,7 @@
         let that = this
         console.log(e.detail.value.length)
         if (e.detail.value.length === 11) {
-          if (that.checkPhone(e.detail.value)) {
+          if (that.checkMobile(e.detail.value).result) {
             that.queryByMobile(e.detail.value).then(res => {
               console.log(res, '员工信息')
               if (res.data.data) {
