@@ -30,6 +30,7 @@
     .login-icon {
       width:40rpx;
       height:50rpx;
+      vertical-align: top;
     }
 
     input{
@@ -105,7 +106,7 @@
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_sj.png"/>
-      <input class="inputinput" style="width: 68%;" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone"></input>
+      <input class="inputinput" style="width: 68%;" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone" />
     </view>
 	<!--
     <view class="inputGroup">
@@ -116,7 +117,7 @@
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_yzm.png"/>
-      <input class="inputinput" style="width: 68%;" value="{{ verifyCode }}" type="number" maxlength="4" placeholder="请输入验证码" bind:change="bindCode"></input>
+      <input class="inputinput" style="width: 68%;" value="{{ verifyCode }}" type="number" maxlength="4" placeholder="请输入验证码" bind:change="bindCode" />
       <text class="getCode" @tap="getCode">{{text}}验证码</text>
     </view>
 	<!--
@@ -145,7 +146,7 @@
 
   export default class register extends wepy.page {
     config = {
-      navigationBarTitleText: '登录',
+      navigationBarTitleText: '注册',
       navigationBarBackgroundColor: '#00479D',
       navigationBarTextStyle: 'white'
     }

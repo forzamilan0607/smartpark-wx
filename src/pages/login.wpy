@@ -30,6 +30,7 @@
     .login-icon {
       width:40rpx;
       height:50rpx;
+      vertical-align: top;
     }
 
     input{
@@ -42,7 +43,7 @@
       color:#fff;
       height:100rpx;
       line-height:100rpx;
-	  background: #00479D;
+	    background: #00479D;
       border-radius:8px;
       border:none;
     }
@@ -71,7 +72,7 @@
   .inputinput {
     display: inline-block;
     padding-left: 20rpx;
-	color: #1c5aa5;
+	  color: #1c5aa5;
   }
   .navigator-hover {
     color:#081b31;
@@ -92,15 +93,15 @@
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_sj.png"/>
-      <input class="inputinput" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone"></input>
+      <input class="inputinput" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone" />
     </view>
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_yzm.png"/>
-      <input class="inputinput" value="{{ password }}" type="password" password="true" maxlength="-1" placeholder="请输入密码" bind:change="bindPassword"></input>
+      <input class="inputinput" value="{{ password }}" type="password" password="true" maxlength="-1" placeholder="请输入密码" bind:change="bindPassword" />
     </view>
 	
-	<view style="flex-direction:row;display: flex;">
+	  <view style="flex-direction:row;display: flex;margin-top:20rpx;">
        <view class="flex-item" style="margin-left: 5%;">
          <navigator url="./register" hover-class="navigator-hover">注册</navigator>
        </view>
@@ -138,10 +139,10 @@
 
     methods = {
       login () {
-		if (!this.telPhone) {
-		  this.selfToast('请输入手机号!', 'none', 2000)
+        if (!this.telPhone) {
+          this.selfToast('请输入手机号!', 'none', 2000)
           return false
-		}
+        }
         if (!this.checkMobile(this.telPhone).result) {
           this.selfToast('请输入正确的手机号!', 'none', 2000)
           return false

@@ -93,6 +93,15 @@
     border: 1px dashed #f4f4f4;
   }
 
+  .addButton {
+    font-size: 20px;
+    color: red;
+    font-weight: 700;
+    text-align: right;
+    padding-right: 10rpx;
+    flex: 3;
+  }
+
 </style>
 
 <template>
@@ -123,30 +132,6 @@
       <text>验证码：</text>
       <input class="input" placeholder="必填" value="{{form.verifyCode}}" bindinput="bindInput('verifyCode')"/>
     </view>
-<!--
-    <view class="inputGroup">
-      <text>来访开始时间：</text>
-      <view class="pick">
-        <picker mode="date" value="{{form.appointStartTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindDateChange">
-          <view class="picker">
-            {{form.appointStartTime}}
-          </view>
-        </picker>
-      </view>
-    </view>
-
-     <view class="inputGroup">
-      <text>来访结束时间：</text>
-      <view class="pick">
-        <picker mode="date" value="{{form.appointEndTime}}" start="{{startDay}}" end="2099-12-31" bindchange="bindEndDateChange">
-          <view class="picker">
-            {{form.appointEndTime}}
-          </view>
-        </picker>
-      </view>
-    </view>
--->
-
 
     <view class="inputGroup">
       <text>来访开始时间：</text>
@@ -179,18 +164,22 @@
       <switch checked bindchange="switchChange"/>
     </view>
 
-    <view class="carCard" wx:if="{{carCard}}">
+    <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="index">
+      <view class="inputGroup">
+        <text>车辆信息{{index + 1}}:</text>
+        <view class="addButton" @tap="addCar">+</view>
+      </view>
       <view class="inputGroup">
         <text>车牌号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.carNo}}" bindinput="bindInputCar('carNo')"/>
+        <input class="input" placeholder="必填" type="number" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>驾驶员：</text>
-        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.name}}" bindinput="bindInputCar('name')"/>
+        <input class="input" placeholder="必填" type="number" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>手机号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{carInfoEntitys.phone}}" bindinput="bindInputCar('phone')"/>
+        <input class="input" placeholder="必填" type="number" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
       </view>
       <!-- <view class="inputGroup">
         <text>与访客一致：</text>
@@ -262,11 +251,11 @@
           sex: '',                     // 性别 1 2
           visitorId: ''                // 访客id
         },
-        carInfoEntitys: {              // 车辆信息集合
+        carInfoEntitys: [{              // 车辆信息集合
           carNo: '',                   // 车牌号
           name: '',                    // 驾驶员姓名
           phone: ''                    // 驾驶员手机号
-        }
+        }]
       },
       basestaff: {},    // 员工信息
       basetype: false,  // 判断是否展示员工信息栏
@@ -286,10 +275,11 @@
         console.log(this.form[val])
       },
 
-      bindInputCar (val, e) {
-        console.log(e, val)
+      bindInputCar (val, index, e) {
+        console.log(e, val, index)
+        console.log(index, 111)
         console.log(val)
-        this.form.carInfoEntitys[val] = e.detail.value
+        this.form.carInfoEntitys[index][val] = e.detail.value
         this.$apply()
         console.log(this.form.carInfoEntitys[val])
       },
@@ -340,6 +330,16 @@
             }
           })
         }
+      },
+
+      addCar () {
+        let that = this
+        that.form.carInfoEntitys.push({
+          carNo: '',
+          name: '',
+          phone: ''
+        })
+        that.$apply()
       },
 
       // photo
@@ -419,6 +419,7 @@
       // 提交
       submit () {
         let that = this
+        console.log(that.form)
         // param
         console.log(that.carCard)
         // 校验
@@ -503,9 +504,10 @@
         console.log(that.carCard)
         console.log(that.form.carInfoEntitys)
         if (that.carCard) {
-          param.carInfoEntitys = []
-          param.carInfoEntitys.push(that.form.carInfoEntitys)
-          console.log(param.carInfoEntitys)
+          // param.carInfoEntitys = []
+          // param.carInfoEntitys.push(that.form.carInfoEntitys)
+          // console.log(param.carInfoEntitys)
+          param.carInfoEntitys = that.form.carInfoEntitys
         }
         console.log(param)
         that.saveVisitor(param).then(res => {
