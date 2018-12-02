@@ -100,6 +100,15 @@
   border: 1px dashed #333;
 }
 
+.addButton {
+  font-size: 20px;
+  color: red;
+  font-weight: 700;
+  text-align: right;
+  padding-right: 10rpx;
+  flex: 3;
+}
+
 </style>
 
 <template>
@@ -167,8 +176,12 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
 
   <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
   <view class="inputGroup">
-  <text>车牌号：</text>
-<input class="input" placeholder="必填" type="number" disabled  value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
+    <text>车辆信息{{index + 1}}:</text>
+    <view class="addButton" @tap="addCar">+</view>
+  </view>
+  <view class="inputGroup">
+    <text>车牌号：</text>
+    <input class="input" placeholder="必填" type="number" disabled  value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
   </view>
   <view class="inputGroup">
   <text>驾驶员：</text>
@@ -204,7 +217,6 @@ import wepy from 'wepy'
 import utilMixin from '../mixins/util'
 import toastMixin from '../mixins/toast'
 import api from '../mixins/api'
-
 
 export default class OrderInfo extends wepy.page {
   config = {
@@ -468,7 +480,7 @@ export default class OrderInfo extends wepy.page {
       multiIndex: this.data.multiIndex
     }
     // 把选择的对应值赋值给 multiIndex
-    data.multiIndex[e.detail.column] = e.detail.value;
+    data.multiIndex[e.detail.column] = e.detail.value
 
     // 然后再判断当前改变的是哪一列,如果是第1列改变
     if (e.detail.column === 0) {
@@ -484,7 +496,6 @@ export default class OrderInfo extends wepy.page {
 
       // 如果是第2列改变
     } else if (e.detail.column === 1) {
-
       // 如果第一列为今天
       if (data.multiIndex[0] === 0) {
         if (e.detail.value === 0) {
@@ -502,7 +513,6 @@ export default class OrderInfo extends wepy.page {
     } else {
       // 如果第一列为'今天'
       if (data.multiIndex[0] === 0) {
-
         // 如果第一列为 '今天'并且第二列为当前时间
         if (data.multiIndex[1] === 0) {
           that.loadData(hours, minute)
@@ -519,7 +529,6 @@ export default class OrderInfo extends wepy.page {
   }
 
   loadData (hours, minute) {
-
     var minuteIndex
     if (this.currentMinute > 0 && this.currentMinute <= 10) {
       minuteIndex = 10
