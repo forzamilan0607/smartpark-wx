@@ -2,7 +2,7 @@ import wepy from 'wepy'
 // import toast from './toast'
 // const devUrl = 'http://47.99.125.173:3000/mock/14/'
 // const devUrl = 'http://localhost:8087/'
-const devUrl = 'http://sp.handcode.cn/'
+const devUrl = 'https://sp.handcode.cn/'
 
 export default class Api extends wepy.mixin {
   /**
