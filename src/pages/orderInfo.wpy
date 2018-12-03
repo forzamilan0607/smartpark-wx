@@ -177,7 +177,7 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
   <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
   <view class="inputGroup">
     <text>车辆信息{{index + 1}}:</text>
-    <view class="addButton" @tap="addCar">+</view>
+    <!-- <view class="addButton" @tap="addCar">+</view> -->
   </view>
   <view class="inputGroup">
     <text>车牌号：</text>

@@ -167,8 +167,8 @@
     <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="index">
 	  <view class="inputGroup">
         <text>车辆信息{{index + 1}}:</text>
-        <view wx:if="{{index > 0}}" class="addButton" @tap="deleteCar({{index}})">-</view>
-        <view class="addButton" @tap="addCar">+</view>
+        <!-- <view  class="addButton" ></view> -->
+        <view class="addButton"> <text wx:if="{{index > 0}}" style="margin-right:20rpx;font-weight:700;" @tap="deleteCar('{{index}}')">-</text> <text style="margin-right:20rpx;font-weight:700;" @tap="addCar">+</text></view>
       </view>
 		
       <view class="inputGroup">
@@ -343,8 +343,8 @@
         })
         that.$apply()
       },
-	  
-	  deleteCar (index) {
+
+	    deleteCar (index) {
         let that = this
         that.form.carInfoEntitys.splice(index, 1)
         that.$apply()
@@ -475,26 +475,25 @@
         }*/
         // 添加车牌信息，则需要校验必填项
         if (that.carCard) {
-			for (let i = 0; i < that.form.carInfoEntitys.length; i++) {
-				let item = that.form.carInfoEntitys[i];
-				if (!item.carNo) {
-					that.selfToast('请输入车牌号', 'none')
-					return false
-				}
-				if (!item.name) {
-					that.selfToast('请输入驾驶员姓名', 'none')
-					return false
-				}
-				if (!item.phone) {
-					that.selfToast('请输入驾驶员手机号码', 'none')
-					return false
-				}
-				if (!that.checkPhone(item.phone)) {
-					that.selfToast('请输入正确的手机号', 'none')
-					return false
-				}
-			}
-          
+			    for (let i = 0; i < that.form.carInfoEntitys.length; i++) {
+            let item = that.form.carInfoEntitys[i]
+            if (!item.carNo) {
+              that.selfToast('请输入车牌号', 'none')
+              return false
+            }
+            if (!item.name) {
+              that.selfToast('请输入驾驶员姓名', 'none')
+              return false
+            }
+            if (!item.phone) {
+              that.selfToast('请输入驾驶员手机号码', 'none')
+              return false
+            }
+            if (!that.checkPhone(item.phone)) {
+              that.selfToast('请输入正确的手机号', 'none')
+              return false
+            }
+          }  
         }
         const openId = wepy.getStorageSync('openid')
         let param = {
@@ -620,7 +619,6 @@
 
         // 如果是第2列改变
       } else if (e.detail.column === 1) {
-
         // 如果第一列为今天
         if (data.multiIndex[0] === 0) {
           if (e.detail.value === 0) {
@@ -669,7 +667,7 @@
         minuteIndex = 60
       }
 
-      if (minuteIndex == 60) {
+      if (minuteIndex === 60) {
         // 时
         for (let i = currentHours + 1; i < 24; i++) {
           hours.push(i)
