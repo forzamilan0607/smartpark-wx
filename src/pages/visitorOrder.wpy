@@ -6,7 +6,7 @@
   .inputGroup {
     display: flex;
     padding: 18rpx;
-    border-bottom: 1px solid #f4f4f4;
+    /**border-bottom: 1px solid #f4f4f4;**/
     text {
       flex: 1;
       font-size: 14px;
@@ -61,7 +61,7 @@
       background-color: #fff;
       margin: 300rpx auto;
       input {
-        border-bottom: 1px solid #f4f4f4;
+        /**border-bottom: 1px solid #f4f4f4;**/
         width: 100%;
         font-size: 14px;
         text-align: center;
@@ -78,7 +78,7 @@
   }
 
   .choose {
-    background:linear-gradient(to right,#00479D 50%, rgba(233,72,22,1) 100%);
+    background: #00479D;
     height: 50rpx;
     line-height: 50rpx;
     font-size: 14px;
@@ -88,18 +88,36 @@
     width: 50%;
     margin: 40rpx auto;
   }
+  
+  .choose2 {
+    background: #00479D;
+    color: #fff;
+    border-radius: 10rpx;
+    padding: 5px;
+  }
 
   .carCard {
-    border: 1px dashed #f4f4f4;
+    border: 1px solid #f4f4f4;
+	margin-bottom: 10px;
   }
 
   .addButton {
-    font-size: 20px;
-    color: red;
-    font-weight: 50;
     text-align: right;
     padding-right: 10rpx;
     flex: 3;
+  }
+  .time-picker {
+	font-size: 14px;
+	padding-top: 4px;
+  }
+  .input-search {
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbElEQVQ4T6XTv0vDQBQH8O+r4tTFhOomXgcHJ/8BJ+noKtJF0MHFRajCBYWAcGmxgyDYioiLWxeX/gfiLihU1MRfgyBNKAjSUvMkFktbGm3tjXff93nc444w4KIB69EOxMyoFq3uAZgjYJyJ7hl84NlWLqxRC2CO6KJ6CYLOQJo5cgtwgsBrAGVdR212Q5qAJuQOAes++dOenXn6CWtCrgA45DrNeM/qqhNpArqQNz6o4DlqqzOkxeU1QAXXVmYooMWNCphTrmMddQGKYHpxHbUaDgh5AULJta3l9tD3bB4BUmVH7YdfYVIuMeGEieY9WxUbQTOiiVoOhEXG54RnZyqhQHCgC3nKQBLAOQE+E2IATRHzHQhnZduSvwLB4WjcSBKQAHgMjFKdhvLD8GcJOIYPq/ygjFak55eox42gu2LmDdexsj9Iz0BQoAm5S0QpZn/BddKFYK8voIEY27UPzr+/Wm//Av4cYr+/8wsxfocRgUZMTQAAAABJRU5ErkJggg==);
+	background-repeat: no-repeat;
+	background-position: right center;
+  }
+  .myimg {
+	width: 35rpx;
+	height: 35rpx;
   }
 
 </style>
@@ -108,7 +126,7 @@
   <view class="main">
     <view class="inputGroup">
       <text>被访人：</text>
-      <input class="input" value="{{form.staffName}}" placeholder="必填" bindfocus="bindfocus"/>
+      <input class="input input-search" value="{{form.staffName}}" placeholder="必填" bindfocus="bindfocus"/>
     </view>
 
     <view class="inputGroup">
@@ -168,7 +186,14 @@
 	  <view class="inputGroup">
         <text>车辆信息{{index + 1}}:</text>
         <!-- <view  class="addButton" ></view> -->
-        <view class="addButton"> <text wx:if="{{index > 0}}" style="margin-right:20rpx;font-weight:700;" @tap="deleteCar('{{index}}')">-</text> <text style="margin-right:20rpx;font-weight:700;" @tap="addCar">+</text></view>
+        <view class="addButton"> 
+			<!--
+			<text wx:if="{{index > 0}}" class="choose2" @tap="deleteCar('{{index}}')">-</text> 
+			<text class="choose2" @tap="addCar">+</text>
+			-->
+			<image class="myimg" style="margin-right:15rpx;" src="../assets/images/delete.png" wx:if="{{index > 0}}" @tap="deleteCar('{{index}}')"/>
+			<image class="myimg" src="../assets/images/add.png" @tap="addCar"/>
+		</view>
       </view>
 		
       <view class="inputGroup">
@@ -752,15 +777,15 @@
       if (monthDay === '今天') {
         var month = date.getMonth() + 1
         var day = date.getDate()
-        monthDay = month + '-' + day
+        monthDay = that.convertTime(month) + '-' + that.convertTime(day)
       } else if (monthDay === '明天') {
         var date1 = new Date(date)
         date1.setDate(date.getDate() + 1)
-        monthDay = (date1.getMonth() + 1) + '-' + date1.getDate()
+        monthDay = that.convertTime((date1.getMonth() + 1)) + '-' + that.convertTime(date1.getDate())
       } else {
         let month = monthDay.split('-')[0] // 返回月
         let day = monthDay.split('-')[1] // 返回日
-        monthDay = month + '-' + day
+        monthDay = that.convertTime(month) + '-' + that.convertTime(day)
       }
       var startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
       this.form[val] = startDate

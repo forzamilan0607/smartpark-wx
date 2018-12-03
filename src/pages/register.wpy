@@ -181,8 +181,8 @@
         this.loginOrRegister(this.telPhone, this.verifyCode, openId).then(res => {
           console.log(res)
           // 存储token, menus
-          // wepy.setStorageSync('token', res.data.token)
-          // wepy.setStorageSync('menus', res.data.menus)
+          wepy.setStorageSync('token', res.data.token)
+          wepy.setStorageSync('menus', res.data.menus)
           if (res.data.code === 200) {
             this.$redirect({
               url: './index'

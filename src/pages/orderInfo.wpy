@@ -6,7 +6,7 @@
 .inputGroup {
   display: flex;
   padding: 18rpx;
-  border-bottom: 1px solid #f4f4f4;
+  /**border-bottom: 1px solid #f4f4f4;**/
   text {
     flex: 1;
     font-size: 14px;
@@ -61,7 +61,7 @@
     background-color: #fff;
     margin: 300rpx auto;
     input {
-      border-bottom: 1px solid #f4f4f4;
+      /**border-bottom: 1px solid #f4f4f4;**/
       width: 100%;
       font-size: 14px;
       text-align: center;
@@ -78,7 +78,7 @@
 }
 
 .choose {
-  background:linear-gradient(to right,#00479D 50%, rgba(233,72,22,1) 100%);
+  background: #00479D;
   height: 50rpx;
   line-height: 50rpx;
   font-size: 14px;
@@ -97,7 +97,8 @@
 }
 
 .carCard {
-  border: 1px dashed #333;
+  border: 1px solid #f4f4f4;
+  margin-bottom: 10px;
 }
 
 .addButton {
@@ -108,6 +109,10 @@
   padding-right: 10rpx;
   flex: 3;
 }
+.time-picker {
+	font-size: 14px;
+	padding-top: 4px;
+  }
 
 </style>
 
@@ -152,12 +157,12 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
 
 <view class="inputGroup" wx:if="{{type}}">
   <text>来访开始时间：</text>
-  <input class="input" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
+  <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
 </view>
 
 <view class="inputGroup" wx:if="{{type}}">
   <text>来访结束时间：</text>
-  <input class="input" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
+  <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
 </view>
 
 <view class="inputGroup">
@@ -169,15 +174,15 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
   <text>来访人数：</text>
 <input class="input" placeholder="必填" type="number" value="{{form.companions}}" disabled bindinput="bindInput('companions')"/>
   </view>
-
+<!--
   <view class="inputGroup" wx:if="{{carCard}}">
   <text style="text-align:left">车辆信息</text>
   </view>
+  -->
 
   <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
   <view class="inputGroup">
-    <text>车辆信息{{index + 1}}:</text>
-    <!-- <view class="addButton" @tap="addCar">+</view> -->
+    <text style="text-align: left;">车辆信息{{index + 1}}:</text>
   </view>
   <view class="inputGroup">
     <text>车牌号：</text>
@@ -627,23 +632,21 @@ export default class OrderInfo extends wepy.page {
     var hours = that.data.multiArray[1][e.detail.value[1]]
     var minute = that.data.multiArray[2][e.detail.value[2]]
 
-    if (monthDay === '今天') {
-      var month = that.curDate.getMonth() + 1
-      var day = that.curDate.getDate()
-      monthDay = month + '-' + day
-    } else if (monthDay === '明天') {
-      var date1 = new Date(that.curDate)
-      date1.setDate(that.curDate.getDate() + 1)
-      monthDay = (date1.getMonth() + 1) + '-' + date1.getDate()
-    } else {
-      let month = monthDay.split('-')[0] // 返回月
-      let day = monthDay.split('-')[1] // 返回日
-      monthDay = month + '-' + day
-    }
-
-    var startDate = that.curDate.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
-
-    this.form[val] = startDate
+	if (monthDay === '今天') {
+	  var month = date.getMonth() + 1
+		var day = date.getDate()
+		monthDay = that.convertTime(month) + '-' + that.convertTime(day)
+	  } else if (monthDay === '明天') {
+		var date1 = new Date(date)
+		date1.setDate(date.getDate() + 1)
+		monthDay = that.convertTime((date1.getMonth() + 1)) + '-' + that.convertTime(date1.getDate())
+	  } else {
+		let month = monthDay.split('-')[0] // 返回月
+		let day = monthDay.split('-')[1] // 返回日
+		monthDay = that.convertTime(month) + '-' + that.convertTime(day)
+	  }
+	  var startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
+	  this.form[val] = startDate
   }
 }
 </script>
