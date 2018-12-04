@@ -71,7 +71,7 @@
         margin-top: 20rpx;
         font-size: 14px;
         text-align: center;
-        color: #333;
+        color: #1c5aa5;
         line-height: 60rpx;
       }
     }
@@ -88,7 +88,7 @@
     width: 50%;
     margin: 40rpx auto;
   }
-  
+
   .choose2 {
     background: #00479D;
     color: #fff;
@@ -131,18 +131,18 @@
 
     <view class="inputGroup">
       <text>姓名：</text>
-      <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')"/>
+      <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')" bindblur="fillCarInfo('name')"/>
     </view>
 
     <view class="inputGroup">
       <text class="mobile">身份证：</text>
-      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')"/>
+      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" />
       <text class="getCode" @tap="photo">点击拍照</text>
     </view>
 
     <view class="inputGroup">
       <text class="mobile">手机号：</text>
-      <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')"/>
+      <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')" bindblur="fillCarInfo('phone')"/>
       <text class="getCode" @tap="getCode">{{text}}验证码</text>
     </view>
 
@@ -186,16 +186,12 @@
 	  <view class="inputGroup">
         <text>车辆信息{{index + 1}}:</text>
         <!-- <view  class="addButton" ></view> -->
-        <view class="addButton"> 
-			<!--
-			<text wx:if="{{index > 0}}" class="choose2" @tap="deleteCar('{{index}}')">-</text> 
-			<text class="choose2" @tap="addCar">+</text>
-			-->
+        <view class="addButton">
 			<image class="myimg" style="margin-right:15rpx;" src="../assets/images/delete.png" wx:if="{{index > 0}}" @tap="deleteCar('{{index}}')"/>
 			<image class="myimg" src="../assets/images/add.png" @tap="addCar"/>
 		</view>
       </view>
-		
+
       <view class="inputGroup">
         <text>车牌号：</text>
         <input class="input" placeholder="必填" type="number" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
@@ -208,16 +204,16 @@
         <text>手机号：</text>
         <input class="input" placeholder="必填" type="number" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
       </view>
-      <!-- <view class="inputGroup">
+      <view wx:if="{{index == 0}}" class="inputGroup">
         <text>与访客一致：</text>
-        <switch checked bindchange="switchChangeCar"/>
-      </view> -->
+        <switch bindchange="switchChangeCar"/>
+      </view>
     </view>
 
     <!-- mark -->
     <view class="mark" wx:if="{{search}}" @tap="mark">
       <view class="searchView" catchtap="catch">
-        <input value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
+        <input style="color:#1c5aa5;" value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
         <view class="basestaff" wx:if="{{basetype}}">
           <text>员工信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
         </view>
@@ -287,6 +283,7 @@
       basestaff: {},    // 员工信息
       basetype: false,  // 判断是否展示员工信息栏
       carCard: true,   // 开关
+	  sameWithVisitor: false,
       startDate: '请选择日期',
       multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
       multiIndex: [0, 0, 0]
@@ -296,7 +293,6 @@
       // input
       bindInput (val, e) {
         console.log(e, val)
-        console.log(val)
         this.form[val] = e.detail.value
         this.$apply()
         console.log(this.form[val])
@@ -373,6 +369,24 @@
         let that = this
         that.form.carInfoEntitys.splice(index, 1)
         that.$apply()
+      },
+
+	    fillCarInfo (val, e) {
+		    let that = this
+		    if (that.sameWithVisitor) {
+			    val === 'name' ? that.form.carInfoEntitys[0].name = e.detail.value : that.form.carInfoEntitys[0].phone = e.detail.value
+		    }
+		  },
+      switchChangeCar (e) {
+		    let that = this
+        that.sameWithVisitor = e.detail.value
+        if (that.sameWithVisitor) {
+          that.form.carInfoEntitys[0].name = that.form.name
+          that.form.carInfoEntitys[0].phone = that.form.phone
+        } else {
+          that.form.carInfoEntitys[0].name = ''
+          that.form.carInfoEntitys[0].phone = ''
+        }
       },
 
       // photo
@@ -518,7 +532,7 @@
               that.selfToast('请输入正确的手机号', 'none')
               return false
             }
-          }  
+          }
         }
         const openId = wepy.getStorageSync('openid')
         let param = {

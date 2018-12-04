@@ -62,44 +62,34 @@ export default class extends wepy.app {
           console.log(data.code)
           const appid = 'wx2543cd2140b815b1'
           const secret = '2b530219c5266ffe918650556b74889c'
-
           wepy.request({
-            url: `https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code=${data.code}&&grant_type=authorization_code`,
-            methods: 'POST',
+            url: `https://sp.handcode.cn/app/appEnter`,
+            method: 'POST',
+            data: {
+              appId: appid,
+              secret: secret,
+              jsCode: data.code,
+              grantType: 'authorization_code'
+            },
             success: res => {
-              console.log(res)
-              wepy.setStorageSync('openid', res.data.openid)
-              // 如果有openid 那么直接登录
-              if (res.data.openid) {
-                wepy.request({
-                  url: `https://sp.handcode.cn/app/appEnter?openId=${res.data.openid}`,
-                  // url: `http://192.168.3.183:8087/app/appEnter?openId=${res.data.openid}`,
-                  success: res => {
-                    console.log(res, 2222)
-                    if (res.data.code === 500) {
-                      return false
-                    }
-                    if (res.data.code === 510) {
-                      wx.redirectTo({
-                        url: './register'
-                      })
-                    }
-                    wepy.setStorageSync('token', res.data.token)
-                    wepy.setStorageSync('menus', res.data.menus)
-                    wx.redirectTo({
-                      url: './index'
-                    })
-                  },
-                  fail: res => {
-                  }
+              console.log(res, 2222)
+              if (res.data.code === 500) {
+                return false
+              }
+              if (res.data.code === 510) {
+                wepy.setStorageSync('openid', res.data.openid)
+                wx.redirectTo({
+                  url: './register'
                 })
               }
+              wepy.setStorageSync('openid', res.data.openid)
+              wepy.setStorageSync('token', res.data.token)
+              wepy.setStorageSync('menus', res.data.menus)
+              wx.redirectTo({
+                url: './index'
+              })
             },
-            fail: err => {
-              console.log(err)
-            },
-            complete: res => {
-
+            fail: res => {
             }
           })
         } else {
