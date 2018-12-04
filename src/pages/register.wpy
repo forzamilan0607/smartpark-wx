@@ -131,7 +131,7 @@
     </view>
 	-->
 
-    <button class="login-btn" @tap="login">注册</button>
+    <button class="login-btn" @tap="login">登录</button>
     <view style="text-align: center;">
       <text class="reg-tip">未注册用户登录默认为掌码智慧园区注册用户</text>
     </view>
