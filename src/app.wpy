@@ -78,7 +78,13 @@ export default class extends wepy.app {
                 return false
               } else if (res.data.code === 510) {
                 wepy.setStorageSync('openid', res.data.openid)
-                this.selfToast('请先注册！', 'none')
+                setTimeout(function() {
+                  wepy.showToast({
+                    title: '请先注册!',
+                    icon: 'none',
+                    duration: 2000
+                  })
+                }, 2000)
                 wx.redirectTo({
                   url: './register'
                 })
