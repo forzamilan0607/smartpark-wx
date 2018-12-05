@@ -136,7 +136,7 @@
 
     <view class="inputGroup">
       <text class="mobile">身份证：</text>
-      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" />
+      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
       <text class="getCode" @tap="photo">点击拍照</text>
     </view>
 
@@ -194,11 +194,11 @@
 
       <view class="inputGroup">
         <text>车牌号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>驾驶员：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>手机号：</text>
@@ -213,9 +213,9 @@
     <!-- mark -->
     <view class="mark" wx:if="{{search}}" @tap="mark">
       <view class="searchView" catchtap="catch">
-        <input style="color:#1c5aa5;" value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
+        <input style="color:#1c5aa5;" focus="{{staff_mobile_focus}}" value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
         <view class="basestaff" wx:if="{{basetype}}">
-          <text>员工信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
+          <text>被访人信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
         </view>
         <view class="choose" wx:if="{{basetype}}" catchtap="choose">选择</view>
       </view>
@@ -286,7 +286,8 @@
 	  sameWithVisitor: false,
       startDate: '请选择日期',
       multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
-      multiIndex: [0, 0, 0]
+      multiIndex: [0, 0, 0],
+	  staff_mobile_focus: false
     }
 
     methods = {
@@ -312,6 +313,7 @@
         console.log('点到了')
         let that = this
         that.search = false
+		this.staff_mobile_focus = false
         that.form.staffPhone = that.basestaff.mobile
         that.form.staffName = that.basestaff.username
         that.$apply()
@@ -423,7 +425,7 @@
         if (e.detail.value.length === 11) {
           if (that.checkMobile(e.detail.value).result) {
             that.queryByMobile(e.detail.value).then(res => {
-              console.log(res, '员工信息')
+              console.log(res, '被访人姓名')
               if (res.data.data) {
                 that.basetype = true
                 that.basestaff = res.data.data
@@ -439,15 +441,50 @@
         }
       },
 
+      autoFillIdcardInfo (e) {
+        let that = this
+        if (e.detail.value) {
+          that.queryVisitorHisByIdcard(e.detail.value).then(res => {
+            if (res.data.code === 200) {
+              if (res.data.data) {
+                let visitor = res.data.data
+                // 填充访客信息和访客车辆信息
+				that.form.name = visitor.name
+				that.form.phone = visitor.phone
+                if (visitor.carInfoList && visitor.carInfoList.length) {
+                  that.form.carInfoEntitys.length = 0
+                  for (var i = 0; i < visitor.carInfoList.length; i++) {
+                    that.form.carInfoEntitys.push({
+						carNo: visitor.carInfoList[i].carNo,
+						name: visitor.carInfoList[i].name,
+						phone: visitor.carInfoList[i].phone
+					})
+                  }
+                }
+				that.setData({
+					name: visitor.name,
+					phone: visitor.phone
+				})
+                that.$apply()
+              }
+            } else {
+              that.selfToast('输入的身份证号不正确', 'none')
+            }
+			    })
+        }
+      },
+
       // focus
       bindfocus (e) {
         this.search = true
+		this.staff_mobile_focus = true
         this.$apply()
       },
 
       // tap mark
       mark () {
         this.search = false
+		this.staff_mobile_focus = false
         this.$apply()
       },
 
@@ -520,6 +557,10 @@
               that.selfToast('请输入车牌号', 'none')
               return false
             }
+			if (!that.isVehicleNumber(item.carNo)) {
+              that.selfToast('[' + item.carNo + ']不是有效的车牌号', 'none')
+              return false
+            }
             if (!item.name) {
               that.selfToast('请输入驾驶员姓名', 'none')
               return false
@@ -566,7 +607,9 @@
             that.$redirect({
               url: './myOrder'
             })
-          }
+          } else {
+			that.selfToast('预约失败，请联系管理员！', 'none')
+		  }
         })
       }
     }

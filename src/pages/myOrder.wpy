@@ -107,6 +107,9 @@
       that.getOrderList(openId, 1).then(res => {
         console.log(res)
         that.list = res.data.page.list
+		if (!that.list || !that.list.length) {
+			that.selfToast('您当前还没有预约单', 'none')
+		}
         that.$apply()
       })
     }
