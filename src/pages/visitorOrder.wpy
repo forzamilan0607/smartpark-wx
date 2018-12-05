@@ -202,7 +202,7 @@
       </view>
       <view class="inputGroup">
         <text>手机号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
       </view>
       <view wx:if="{{index == 0}}" class="inputGroup">
         <text>与访客一致：</text>
@@ -477,14 +477,14 @@
       // focus
       bindfocus (e) {
         this.search = true
-		    this.staff_mobile_focus = true
+        this.staff_mobile_focus = true
         this.$apply()
       },
 
       // tap mark
       mark () {
         this.search = false
-		    this.staff_mobile_focus = false
+		this.staff_mobile_focus = false
         this.$apply()
       },
 
@@ -523,7 +523,7 @@
           that.selfToast('请输入手机号', 'none')
           return false
         }
-        if (!that.checkPhone(that.form.phone)) {
+        if (!that.checkMobile(that.form.phone).result) {
           that.selfToast('请输入正确的手机号', 'none')
           return false
         }
@@ -569,7 +569,7 @@
               that.selfToast('请输入驾驶员手机号码', 'none')
               return false
             }
-            if (!that.checkPhone(item.phone)) {
+            if (!that.checkMobile(item.phone).result) {
               that.selfToast('请输入正确的手机号', 'none')
               return false
             }

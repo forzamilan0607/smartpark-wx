@@ -74,13 +74,15 @@
     display: inline-block;
     padding-left: 20rpx;
     color: #1c5aa5;
+    line-height: 30rpx;
   }
   .getCode {
     font-size: 28rpx;
     /**color: #666;**/
-	color: #1c5aa5;
-	top: -14rpx;
-	position: relative;
+    color: #1c5aa5;
+    top: 4rpx;
+    position: relative;
+    line-height: 30rpx;
   }
   .navigator-hover {
     color:#081b31;
@@ -88,7 +90,7 @@
   .flex-item {
     width: 50%;
     font-size: 24rpx;
-	color: #1c5aa5;
+	  color: #1c5aa5;
   }
   .reg-tip {
 	font-size: 22rpx;

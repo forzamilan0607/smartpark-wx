@@ -36,6 +36,17 @@ export default class util extends wepy.mixin {
 	}
   }
 
+  // 车牌号正则
+  check_licensePlate(licensePlate) {
+    console.log('开始车牌号验证', licensePlate)
+    var re = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/
+    if(licensePlate.search(re) == -1) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   // 扫码
   shareCode () {
     let that = this
