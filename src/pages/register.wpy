@@ -238,7 +238,7 @@
           // 先验证手机号是否正确
           const mobile = that.telPhone
           console.log(mobile)
-          if (!that.checkPhone(mobile)) {
+          if (!that.checkMobile(mobile).result) {
             that.selfToast('请输入正确的手机号', 'none')
             return false
           }
@@ -268,11 +268,11 @@
     }
 
     onLoad() {
-      if (wepy.getStorageSync('token')) {
+      /*if (wepy.getStorageSync('token')) {
         this.$redirect({
           url: './index'
         })
-      }
+      }*/
     }
   }
 </script>
