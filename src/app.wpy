@@ -76,20 +76,20 @@ export default class extends wepy.app {
               console.log(res, 2222)
               if (res.data.code === 500) {
                 return false
-              }
-              if (res.data.code === 510) {
+              } else if (res.data.code === 510) {
                 wepy.setStorageSync('openid', res.data.openid)
                 this.selfToast('请先注册！', 'none')
                 wx.redirectTo({
                   url: './register'
                 })
+              } else {
+                wepy.setStorageSync('openid', res.data.openid)
+                wepy.setStorageSync('token', res.data.token)
+                wepy.setStorageSync('menus', res.data.menus)
+                // wx.redirectTo({
+                //   url: './index'
+                // })
               }
-              wepy.setStorageSync('openid', res.data.openid)
-              wepy.setStorageSync('token', res.data.token)
-              wepy.setStorageSync('menus', res.data.menus)
-              // wx.redirectTo({
-              //   url: './index'
-              // })
             },
             fail: res => {
             }

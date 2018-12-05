@@ -4,7 +4,7 @@ export default class util extends wepy.mixin {
   // 手机号码正则验证
   checkPhone (tel) {
     console.log(tel)
-    if (!(/^1[3456789]\d{9}$/.test(tel))) {
+    if (!tel || !/^1[3|4|5|6|7|8][0-9]{9}$/.test(tel)) {
       return false
     }
     return true
