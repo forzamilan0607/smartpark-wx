@@ -2,6 +2,7 @@
 @color: #FF5D22;
 page {
   background-color: #f7f7f7;
+  width: 100%;
 }
 .container {
   height: 100%;
@@ -26,9 +27,9 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
+      'pages/index',
       'pages/register',
       'pages/login',
-      'pages/index',
       'pages/myOrder',
       'pages/visitorOrder',
       'pages/orderAuthorize',
@@ -78,6 +79,7 @@ export default class extends wepy.app {
               }
               if (res.data.code === 510) {
                 wepy.setStorageSync('openid', res.data.openid)
+                this.selfToast('请先注册！', 'none')
                 wx.redirectTo({
                   url: './register'
                 })
@@ -85,14 +87,16 @@ export default class extends wepy.app {
               wepy.setStorageSync('openid', res.data.openid)
               wepy.setStorageSync('token', res.data.token)
               wepy.setStorageSync('menus', res.data.menus)
-              wx.redirectTo({
-                url: './index'
-              })
+              // wx.redirectTo({
+              //   url: './index'
+              // })
             },
             fail: res => {
             }
           })
         } else {
+          this.selfToast('请先注册！' + data.errMsg, 'none')
+
           console.log('登录失败！' + data.errMsg)
         }
       }

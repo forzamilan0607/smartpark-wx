@@ -194,15 +194,15 @@
 
       <view class="inputGroup">
         <text>车牌号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>驾驶员：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
       </view>
       <view class="inputGroup">
         <text>手机号：</text>
-        <input class="input" placeholder="必填" type="number" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
+        <input class="input" placeholder="必填" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
       </view>
       <view wx:if="{{index == 0}}" class="inputGroup">
         <text>与访客一致：</text>
@@ -486,7 +486,7 @@
           that.selfToast('请输入手机号', 'none')
           return false
         }
-        if (!that.checkPhone(that.form.phone)) {
+        if (!that.checkMobile(that.form.phone).result) {
           that.selfToast('请输入正确的手机号', 'none')
           return false
         }
@@ -516,8 +516,8 @@
         if (that.carCard) {
 			    for (let i = 0; i < that.form.carInfoEntitys.length; i++) {
             let item = that.form.carInfoEntitys[i]
-            if (!item.carNo) {
-              that.selfToast('请输入车牌号', 'none')
+            if (!that.check_licensePlate(item.carNo)) {
+              that.selfToast('请输入正确的车牌号', 'none')
               return false
             }
             if (!item.name) {
@@ -528,7 +528,7 @@
               that.selfToast('请输入驾驶员手机号码', 'none')
               return false
             }
-            if (!that.checkPhone(item.phone)) {
+            if (!that.checkMobile(item.phone).result) {
               that.selfToast('请输入正确的手机号', 'none')
               return false
             }
