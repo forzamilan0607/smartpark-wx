@@ -35,7 +35,7 @@ export default class Api extends wepy.mixin {
             resolve(res)
             this.toast('登录信息失效!', 'none')
             wepy.clearStorageSync('token', '')
-            that.$redirect('../pages/login')
+            that.$redirect('../pages/register')
             // that.selfToast(res.error)
           } else if (res.data.code === 500) {
             that.selfToast(res.data.msg, 'none', 2000)
@@ -102,6 +102,13 @@ export default class Api extends wepy.mixin {
    */
   queryByMobile (mobile) {
     return this.request('base/basestaff/queryByMobile.notoken', {mobile: mobile}, 'POST')
+  }
+
+  /**
+   * 根据身份证号查询访客历史信息
+   */
+  queryVisitorHisByIdcard (idcardNo) {
+    return this.request('busi/visitorinfo/queryByIdcard.notoken?idcardNo=' + idcardNo, null, 'POST')
   }
 
   /**

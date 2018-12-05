@@ -449,22 +449,22 @@
               if (res.data.data) {
                 let visitor = res.data.data
                 // 填充访客信息和访客车辆信息
-				that.form.name = visitor.name
-				that.form.phone = visitor.phone
+                that.form.name = visitor.name
+                that.form.phone = visitor.phone
                 if (visitor.carInfoList && visitor.carInfoList.length) {
                   that.form.carInfoEntitys.length = 0
                   for (var i = 0; i < visitor.carInfoList.length; i++) {
                     that.form.carInfoEntitys.push({
-						carNo: visitor.carInfoList[i].carNo,
-						name: visitor.carInfoList[i].name,
-						phone: visitor.carInfoList[i].phone
-					})
+                      carNo: visitor.carInfoList[i].carNo,
+                      name: visitor.carInfoList[i].name,
+                      phone: visitor.carInfoList[i].phone
+                    })
                   }
                 }
-				that.setData({
-					name: visitor.name,
-					phone: visitor.phone
-				})
+                that.setData({
+                  name: visitor.name,
+                  phone: visitor.phone
+                })
                 that.$apply()
               }
             } else {
@@ -477,14 +477,14 @@
       // focus
       bindfocus (e) {
         this.search = true
-		this.staff_mobile_focus = true
+		    this.staff_mobile_focus = true
         this.$apply()
       },
 
       // tap mark
       mark () {
         this.search = false
-		this.staff_mobile_focus = false
+		    this.staff_mobile_focus = false
         this.$apply()
       },
 
