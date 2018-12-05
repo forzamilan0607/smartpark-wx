@@ -108,7 +108,7 @@
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_sj.png"/>
-      <input class="inputinput" style="width: 68%;" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bind:change="bindTelPhone" />
+      <input class="inputinput" style="width: 68%;" value="{{ telPhone }}" type="number" maxlength="11" placeholder="请输入手机号" bindinput="bindTelPhone" />
     </view>
 	<!--
     <view class="inputGroup">
@@ -119,7 +119,7 @@
 
     <view class="inputGroup">
       <image class="login-icon" src="../assets/images/icon_yzm.png"/>
-      <input class="inputinput" style="width: 60%;" value="{{ verifyCode }}" type="number" maxlength="4" placeholder="请输入验证码" bind:change="bindCode" />
+      <input class="inputinput" style="width: 60%;" value="{{ verifyCode }}" type="number" maxlength="4" placeholder="请输入验证码" bindinput="bindCode" />
       <text class="getCode" @tap="getCode">{{text}}验证码</text>
     </view>
 	<!--
@@ -166,31 +166,31 @@
 
     methods = {
       login () {
-        if (!this.telPhone) {
-          this.selfToast('请输入手机号!', 'none', 2000)
+        let that = this
+        if (!that.telPhone) {
+          that.selfToast('请输入手机号!', 'none', 2000)
           return false
         }
         // 先判断
-        if (!this.checkMobile(this.telPhone).result) {
-          this.selfToast('请输入正确的手机号!', 'none', 2000)
+        if (!that.checkMobile(that.telPhone).result) {
+          that.selfToast('请输入正确的手机号!', 'none', 2000)
           return false
         }
-        if (!this.verifyCode) {
-          this.selfToast('请输入验证码!', 'none', 2000)
+        if (!that.verifyCode) {
+          that.selfToast('请输入验证码!', 'none', 2000)
           return false
         }
         const openId = wepy.getStorageSync('openid')
-        this.loginOrRegister(this.telPhone, this.verifyCode, openId).then(res => {
-          console.log(res)
+        that.loginOrRegister(that.telPhone, that.verifyCode, openId).then(res => {
           // 存储token, menus
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('menus', res.data.menus)
           if (res.data.code === 200) {
-            this.$redirect({
+            that.$redirect({
               url: './index'
             })
           } else {
-            this.selfToast(res.data.msg, 'none', 2000)
+            that.selfToast(res.data.msg, 'none', 2000)
           }
         })
       },
@@ -219,18 +219,21 @@
 
       // 倒计时
       bindTelPhone(e) {
-        this.telPhone = e.detail.value
-        this.$apply()
+        let that = this
+        that.telPhone = e.detail.value
+        that.$apply()
       },
 
       bindPassword(e) {
-        this.password = e.detail.value
-        this.$apply()
+        let that = this
+        that.password = e.detail.value
+        that.$apply()
       },
 
       bindCode(e) {
-        this.verifyCode = e.detail.value
-        this.$apply()
+        let that = this
+        that.verifyCode = e.detail.value
+        that.$apply()
       },
 
       // getCode
@@ -239,7 +242,7 @@
         if (that.text === '发送') {
           // 先验证手机号是否正确
           const mobile = that.telPhone
-          console.log(mobile)
+          console.log(mobile, 'mobile')
           if (!that.checkMobile(mobile).result) {
             that.selfToast('请输入正确的手机号', 'none')
             return false
@@ -270,11 +273,6 @@
     }
 
     onLoad() {
-      /*if (wepy.getStorageSync('token')) {
-        this.$redirect({
-          url: './index'
-        })
-      }*/
     }
   }
 </script>
