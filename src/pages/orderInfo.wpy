@@ -35,6 +35,8 @@
   }
 .pick {
     flex: 2;
+	color: #1c5aa5;
+	border-bottom: 1px solid black;
   .picker {
       font-size: 14px;
       color: #666;
@@ -329,6 +331,14 @@ export default class OrderInfo extends wepy.page {
     // 提交
     submit () {
       let that = this
+      // 校验时间
+      // 校验时间
+      let appointStartTime = new Date(that.form.appointStartTime).getTime()
+      let appointEndTime = new Date(that.form.appointEndTime).getTime()
+      if (appointStartTime > appointEndTime) {
+        that.selfToast('结束时间必须大于开始时间', 'none')
+        return false
+      }
       that.$navigate({
         url: `./doorList?id=${that.id}&startTime=${that.form.appointStartTime}&endTime=${that.form.appointEndTime}`
       })
@@ -627,25 +637,26 @@ export default class OrderInfo extends wepy.page {
   }
 
   bindStartMultiPickerChange (val, e) {
-    var that = this
-    var monthDay = that.data.multiArray[0][e.detail.value[0]]
-    var hours = that.data.multiArray[1][e.detail.value[1]]
-    var minute = that.data.multiArray[2][e.detail.value[2]]
+    let date = new Date()
+    let that = this
+    let monthDay = that.data.multiArray[0][e.detail.value[0]]
+    let hours = that.data.multiArray[1][e.detail.value[1]]
+    let minute = that.data.multiArray[2][e.detail.value[2]]
 
-	if (monthDay === '今天') {
-	  var month = date.getMonth() + 1
-		var day = date.getDate()
-		monthDay = that.convertTime(month) + '-' + that.convertTime(day)
+	  if (monthDay === '今天') {
+	    var month = date.getMonth() + 1
+	    var day = date.getDate()
+		  monthDay = that.convertTime(month) + '-' + that.convertTime(day)
 	  } else if (monthDay === '明天') {
-		var date1 = new Date(date)
-		date1.setDate(date.getDate() + 1)
-		monthDay = that.convertTime((date1.getMonth() + 1)) + '-' + that.convertTime(date1.getDate())
+      let date1 = new Date(date)
+      date1.setDate(date.getDate() + 1)
+      monthDay = that.convertTime((date1.getMonth() + 1)) + '-' + that.convertTime(date1.getDate())
 	  } else {
 		let month = monthDay.split('-')[0] // 返回月
-		let day = monthDay.split('-')[1] // 返回日
-		monthDay = that.convertTime(month) + '-' + that.convertTime(day)
-	  }
-	  var startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
+      let day = monthDay.split('-')[1] // 返回日
+      monthDay = that.convertTime(month) + '-' + that.convertTime(day)
+    }
+    let startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
 	  this.form[val] = startDate
   }
 }
