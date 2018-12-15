@@ -106,7 +106,7 @@
          <navigator url="./register" hover-class="navigator-hover">注册</navigator>
        </view>
        <view class="flex-item" style="margin-left: 50%;">
-         <navigator url="./forgetPwd" open-type="redirect" hover-class="navigator-hover">验证码登录</navigator>
+         <navigator url="./register" open-type="redirect" hover-class="navigator-hover">验证码登录</navigator>
        </view>
     </view>
 
@@ -139,25 +139,26 @@
 
     methods = {
       login () {
-        if (!this.telPhone) {
-          this.selfToast('请输入手机号!', 'none', 2000)
+        let that = this
+        if (!that.telPhone) {
+          that.selfToast('请输入手机号!', 'none', 2000)
           return false
         }
-        if (!this.checkMobile(this.telPhone).result) {
-          this.selfToast('请输入正确的手机号!', 'none', 2000)
+        if (!that.checkMobile(that.telPhone).result) {
+          that.selfToast('请输入正确的手机号!', 'none', 2000)
           return false
         }
-        if (!this.password) {
-          this.selfToast('请输入密码!', 'none', 2000)
+        if (!that.password) {
+          that.selfToast('请输入密码!', 'none', 2000)
           return false
         }
 
-        this.loginApi(this.telPhone, this.password).then(res => {
+        that.loginApi(that.telPhone, that.password).then(res => {
           console.log(res)
           // 存储token, menus
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('menus', res.data.menus)
-          this.$redirect({
+          that.$redirect({
             url: './index'
           })
         })
@@ -203,10 +204,11 @@
     }
 
     onLoad() {
+      let that = this
       console.log(wepy.getStorageSync('token'))
       if (wepy.getStorageSync('token')) {
         console.log(22)
-        this.$redirect({
+        that.$redirect({
           url: './index'
         })
         console.log(323)
