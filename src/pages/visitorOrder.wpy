@@ -67,7 +67,7 @@
       <view class="tab-item {{currentTab === 5?'active':''}}" data-current="5" @tap="swichNav">已过期</view>
     </scroll-view>
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
-      <swiper-item wx:for="{{[0,1,2,3,4,5]}}">
+      <swiper-item wx:for="{{[0,1,2,3,4,5]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
           <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) === currentTab}}">
             <view class="order">

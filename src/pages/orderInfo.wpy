@@ -321,7 +321,7 @@ export default class OrderInfo extends wepy.page {
       that.approve(param).then(res => {
         that.search = false
         // 跳转到首页
-        setTimeout(that.$navigate({
+        setTimeout(wx.switchTab({
           url: './index'
         }), 1000)
       })

@@ -101,7 +101,7 @@
           if (res.data.code === 200) {
             that.selfToast('授权成功', 'success')
             setTimeout(function() {
-              that.$navigate({
+              wx.switchTab({
                 url: './index'
               })
             }, 1000)

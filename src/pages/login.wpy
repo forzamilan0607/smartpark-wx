@@ -158,7 +158,7 @@
           // 存储token, menus
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('menus', res.data.menus)
-          that.$redirect({
+          wx.switchTab({
             url: './index'
           })
         })
