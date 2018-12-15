@@ -203,10 +203,13 @@
     }
 
     onLoad() {
+      console.log(wepy.getStorageSync('token'))
       if (wepy.getStorageSync('token')) {
+        console.log(22)
         this.$redirect({
           url: './index'
         })
+        console.log(323)
       }
     }
   }

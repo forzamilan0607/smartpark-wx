@@ -114,8 +114,7 @@
 .time-picker {
 	font-size: 14px;
 	padding-top: 4px;
-  }
-
+}
 </style>
 
 <template>
@@ -580,7 +579,7 @@ export default class OrderInfo extends wepy.page {
     }
   }
 
-  loadHoursMinute (hours, minute){
+  loadHoursMinute (hours, minute) {
     // 时
     for (let i = 0; i < 24; i++) {
       hours.push(i)
@@ -643,21 +642,21 @@ export default class OrderInfo extends wepy.page {
     let hours = that.data.multiArray[1][e.detail.value[1]]
     let minute = that.data.multiArray[2][e.detail.value[2]]
 
-	  if (monthDay === '今天') {
-	    var month = date.getMonth() + 1
-	    var day = date.getDate()
-		  monthDay = that.convertTime(month) + '-' + that.convertTime(day)
-	  } else if (monthDay === '明天') {
+    if (monthDay === '今天') {
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+      monthDay = that.convertTime(month) + '-' + that.convertTime(day)
+    } else if (monthDay === '明天') {
       let date1 = new Date(date)
       date1.setDate(date.getDate() + 1)
       monthDay = that.convertTime((date1.getMonth() + 1)) + '-' + that.convertTime(date1.getDate())
-	  } else {
-		let month = monthDay.split('-')[0] // 返回月
+    } else {
+      let month = monthDay.split('-')[0] // 返回月
       let day = monthDay.split('-')[1] // 返回日
       monthDay = that.convertTime(month) + '-' + that.convertTime(day)
     }
     let startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
-	  this.form[val] = startDate
+    this.form[val] = startDate
   }
 }
 </script>

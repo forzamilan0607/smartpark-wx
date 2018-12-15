@@ -143,7 +143,6 @@ export default class Menus extends wepy.page {
     // 点击跳转
     sub (url) {
       console.log(url)
-      // this.$navigate('./visitorOrder')
       this.$navigate(url)
     },
 
@@ -161,7 +160,8 @@ export default class Menus extends wepy.page {
   }
 
   onLoad() {
-
+    this.menus = wepy.getStorageSync('menus')
+    this.$apply()
   }
 
   onShow() {
