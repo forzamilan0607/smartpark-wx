@@ -186,7 +186,7 @@
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('menus', res.data.menus)
           if (res.data.code === 200) {
-            that.$redirect({
+            wx.switchTab({
               url: './index'
             })
           } else {
