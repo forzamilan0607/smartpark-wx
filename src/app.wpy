@@ -27,9 +27,9 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/login',
       'pages/index',
       'pages/register',
+      'pages/login',
       'pages/myOrder',
       'pages/visitorOrder',
       'pages/orderAuthorize',
@@ -106,15 +106,17 @@ export default class extends wepy.app {
                     duration: 2000
                   })
                 }, 2000)
-                wx.redirectTo({
+                wepy.$redirect({
                   url: './register'
                 })
+                console.log('未注册用户')
               } else {
+                console.log('已注册用户')
                 wepy.setStorageSync('openid', res.data.openid)
                 wepy.setStorageSync('token', res.data.token)
                 wepy.setStorageSync('menus', res.data.menus)
                 wepy.setStorageSync('roleId', res.data.roleId)
-                wx.redirectTo({
+                wx.switchTab({
                   url: './index'
                 })
               }

@@ -208,7 +208,7 @@
       console.log(wepy.getStorageSync('token'))
       if (wepy.getStorageSync('token')) {
         console.log(22)
-        that.$redirect({
+        wx.switchTab({
           url: './index'
         })
         console.log(323)

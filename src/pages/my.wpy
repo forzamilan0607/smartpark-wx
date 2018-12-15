@@ -75,7 +75,7 @@
         wepy.setStorageSync('token', '')
         wepy.setStorageSync('roleId', '')
         this.$redirect({
-          url: './login'
+          url: './register'
         })
       }
     }
