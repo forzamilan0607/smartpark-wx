@@ -63,7 +63,6 @@
       <view class="tab-item {{currentTab === 0?'active':''}}"  data-current="0" @tap="swichNav">待审核</view>
       <view class="tab-item {{currentTab === 1?'active':''}}" data-current="1" @tap="swichNav">不通过</view>
       <view class="tab-item {{currentTab === 2?'active':''}}" data-current="2" @tap="swichNav">已通过</view>
-      <view class="tab-item {{currentTab === 3?'active':''}}" data-current="3" @tap="swichNav">待激活</view>
       <view class="tab-item {{currentTab === 4?'active':''}}" data-current="4" @tap="swichNav">已完成</view>
       <view class="tab-item {{currentTab === 5?'active':''}}" data-current="5" @tap="swichNav">已过期</view>
     </scroll-view>
@@ -72,7 +71,7 @@
         <scroll-view scroll-y="true" class="scoll-h" >
           <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) === currentTab}}">
             <view class="order">
-              <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "4" ? '待激活' : item.status === "5" ? '已完成' : '已过期'}}</view>
+              <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view>
               <view>
                 <text>访客姓名：</text>{{item.visitorName}}
               </view>
