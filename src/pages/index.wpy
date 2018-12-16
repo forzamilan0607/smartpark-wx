@@ -1,0 +1,99 @@
+<style lang="less">
+  page {
+    background-color: #f7f7f7;
+  }
+
+  .container {
+    height: 100%;
+  }
+
+  .main {
+    width: 100%;
+    background-color: #fff;
+    color: rgba(247,247,247,1);
+    align-items: center;
+    >.menu {
+      display: inline-block;
+      width: 49%;
+      border: 1px solid #eee;
+      text-align: center;
+      padding: 40rpx 0;
+      >image {
+        width: 100rpx;
+        height: 100rpx;
+      }
+      >text {
+        display: block;
+        height: 28rpx;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:28px;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="container">
+    <!-- main -->
+    <view class="main">
+      <view class="menu" @tap="sub('{{item.url}}')" wx:for="{{menus}}" wx:key="{{url}}">
+        <image src="../assets/images/{{item.icon}}" />
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import api from '../mixins/api'
+import toast from '../mixins/toast'
+
+export default class Menus extends wepy.page {
+  config = {
+    navigationBarTitleText: '首页',
+    navigationBarBackgroundColor: '#00479D',
+    navigationBarTextStyle: 'white'
+  }
+
+  data = {
+    menus: []
+  }
+
+  mixins = [api, toast]
+
+  methods = {
+    // 点击跳转
+    sub (url) {
+      console.log(url)
+      this.$navigate(url)
+    },
+
+    navigation(name) {
+      let that = this
+      console.log(name)
+      switch (name) {
+        case '访客预约':
+          that.$navigate('./visitorOrder')
+          break
+        default:
+          break
+      }
+    }
+  }
+
+  onLoad() {
+    this.menus = wepy.getStorageSync('menus')
+    this.$apply()
+  }
+
+  onShow() {
+    this.menus = wepy.getStorageSync('menus')
+    this.$apply()
+    console.log(this.menus)
+  }
+}
+</script>

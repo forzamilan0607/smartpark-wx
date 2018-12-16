@@ -1,0 +1,91 @@
+<style lang="less">
+.main {
+  padding-top: 20rpx;
+  >.userInfo {
+    display: flex;
+    height: 140rpx;
+    padding: 20rpx;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    >.avatar {
+      flex: 1;
+      height: 140rpx;
+    }
+    >.nickName {
+      flex: 5;
+      padding-left: 20rpx;
+      line-height: 120rpx;
+    }
+  }
+  >.logout {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    line-height: 80rpx;
+    border: 1px solid #eee;
+    margin: 60rpx 0;
+    text-align: center;
+    background-color: #fff;
+  }
+}
+</style>
+
+<template>
+  <view class="main">
+    <view class="userInfo">
+      <view class="avatar">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <view class="nickName">
+        <open-data type="userNickName"></open-data>
+      </view>
+    </view>
+
+    <view class="logout">车辆信息</view>
+
+    <view class="logout" wx:if="{{roleId === 2}}">日志管理</view>
+
+    <view class="logout" @tap="logout">退出登录</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+  import api from '../mixins/api'
+
+  export default class My extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的',
+      navigationBarBackgroundColor: '#00479D',
+      navigationBarTextStyle: 'white'
+    }
+
+    mixins = [api, toastMixin, utilMixin]
+
+    data = {
+      roleId: ''
+    }
+
+    methods = {
+      logout () {
+        wepy.setStorageSync('openId', '')
+        wepy.setStorageSync('token', '')
+        wepy.setStorageSync('roleId', '')
+        this.$redirect({
+          url: './register'
+        })
+      }
+    }
+
+    onShow () {
+      this.roleId = wepy.getStorageSync('roleId')
+      this.$apply()
+      console.log(this.roleId)
+    }
+
+    onLoad () {
+    }
+  }
+</script>

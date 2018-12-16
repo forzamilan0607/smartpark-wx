@@ -1,0 +1,13 @@
+{
+  "description": "掌上智慧园区",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wx2543cd2140b815b1",
+  "projectname": "wisdom",
+  "miniprogramRoot": "./dist"
+}
