@@ -3,12 +3,13 @@
   padding-top: 20rpx;
   >.userInfo {
     display: flex;
-    height: 130rpx;
+    height: 140rpx;
+    padding: 20rpx;
     background-color: #fff;
     border-bottom: 1px solid #eee;
     >.avatar {
       flex: 1;
-      padding: 10rpx;
+      height: 140rpx;
     }
     >.nickName {
       flex: 5;

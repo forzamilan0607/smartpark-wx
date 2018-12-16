@@ -89,7 +89,7 @@
         </scroll-view>
       </swiper-item>
     </swiper>
-    <view class="visitor" @tap="visitor">预约</view>
+    <view class="visitor" @tap="visitor" wx:if="{{roleId === 1}}">预约</view>
   </view>
 </template>
 
@@ -121,14 +121,7 @@
       winHeight: '', // 窗口高度
       currentTab: 0, // 预设当前项的值
       scrollLeft: 0, // tab标题的滚动条位置
-      expertList: [{
-        // 假数据
-        img: 'avatar.png',
-        name: '欢顔',
-        tag: '知名情感博主',
-        answer: 134,
-        listen: 2234
-      }]
+      roleId: ''
     }
 
     methods = {
@@ -183,6 +176,8 @@
     onShow () {
       let that = this
       const openId = wepy.getStorageSync('openid')
+      that.roleId = wepy.getStorageSync('roleId')
+      console.log(that.roleId)
       that.getOrderList(openId, 1).then(res => {
         console.log(res)
         that.list = res.data.page.list

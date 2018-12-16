@@ -12,6 +12,9 @@ page {
   justify-content: space-between;
   box-sizing: border-box;
 }
+.wx-switch-input{width:42px !important;height:20px !important;}
+.wx-switch-input::before{width:41px !important;height: 20px !important;}
+.wx-switch-input::after{width: 18px !important;height: 18px !important;}
 </style>
 
 <script>
@@ -35,7 +38,8 @@ export default class extends wepy.app {
       'pages/orderAuthorize',
       'pages/orderInfo',
       'pages/doorList',
-      'pages/my'
+      'pages/my',
+      'pages/doorController'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -51,13 +55,13 @@ export default class extends wepy.app {
       list: [
         {
           pagePath: 'pages/index',
-          selectedIconPath: './assets/images/home.png',
+          selectedIconPath: './assets/images/homeActive.png',
           iconPath: './assets/images/home.png',
           text: '首页'
         },
         {
           pagePath: 'pages/my',
-          selectedIconPath: './assets/images/my.png',
+          selectedIconPath: './assets/images/myActive.png',
           iconPath: './assets/images/my.png',
           text: '我的'
         }

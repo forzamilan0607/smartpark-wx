@@ -1,0 +1,99 @@
+<style lang="less">
+  .main {
+  }
+  .view {
+    width: 100%;
+    height: 60rpx;
+    line-height: 60rpx;
+    font-size: 16px;
+    background-color: #fff;
+    padding: 10rpx;
+    margin-top: 40rpx;
+    padding-left: 30rpx;
+  }
+  .doorList {
+    background-color: #fff;
+    height: 60rpx;
+    font-size: 14px;
+    line-height: 60rpx;
+    margin: 10rpx;
+    padding: 0 20rpx;
+    position: relative;
+    switch {
+      position: absolute;
+      right: 20rpx;
+    }
+  }
+</style>
+
+<template>
+  <view class="main">
+    <view class="view" @tap="my">我的</view>
+    <repeat for="{{privateDoorControllers}}" wx:if="{{private}}">
+      <view class="doorList">{{item.doorName}} <switch bindchange="change({{item.doorId}})" color="#00479D"></switch></view>
+    </repeat>
+
+    <view class="view" @tap="we">公共</view>
+    <repeat for="{{publicDoorControllers}}" wx:if="{{public}}">
+      <view class="doorList">{{item.doorName}} <switch bindchange="change({{item.doorId}})" color="#00479D"></switch></view>
+    </repeat>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+  import api from '../mixins/api'
+
+  export default class DoorController extends wepy.page {
+    config = {
+      navigationBarTitleText: '门控',
+      navigationBarBackgroundColor: '#00479D',
+      navigationBarTextStyle: 'white'
+    }
+
+    mixins = [api, toastMixin, utilMixin]
+
+    data = {
+      privateDoorControllers: [],
+      publicDoorControllers: [],
+      private: true,
+      public: false
+    }
+
+    methods = {
+      change (id) {
+        console.log(id)
+      },
+
+      my () {
+        this.private = !this.private
+        this.$apply()
+      },
+
+      we () {
+        this.public = !this.public
+        this.$apply()
+      }
+    }
+
+    onLoad () {
+
+    }
+
+    onShow () {
+      let that = this
+      const openId = wepy.getStorageSync('openid')
+      console.log(openId)
+      that.getControllers(openId).then(res => {
+        console.log(res)
+        if (res.data.code === 200) {
+          that.privateDoorControllers = res.data.privateDoorControllers
+          that.publicDoorControllers = res.data.publicDoorControllers
+          that.$apply()
+        }
+      })
+    }
+  }
+</script>

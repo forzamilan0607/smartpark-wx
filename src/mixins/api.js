@@ -160,4 +160,12 @@ export default class Api extends wepy.mixin {
   approve (param) {
     return this.request('app/visitorreservation/approve', param, 'POST')
   }
+
+  /**
+   * 获取门控信息
+   * @param {openId} openId
+   */
+  getControllers (openId) {
+    return this.request(`app/entrance/queryDoorControllers?openId=${openId}`)
+  }
 }

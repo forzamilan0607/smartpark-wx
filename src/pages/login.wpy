@@ -204,7 +204,6 @@
     }
 
     onLoad() {
-      let that = this
       console.log(wepy.getStorageSync('token'))
       if (wepy.getStorageSync('token')) {
         console.log(22)
