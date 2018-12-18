@@ -73,6 +73,8 @@
 </style>
 
 <template>
+
+<view>
 	<view class="swiper-tab">
 		<view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">待审核</view>
 		<view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">已审核</view>
@@ -154,7 +156,7 @@
 		  <view wx:if="{{!expiredList}}" class="to-center">当前没有已过期的预约单</view>
 		</swiper-item>
 	</swiper>
-
+</view>
 </template>
 
 <script>
@@ -173,9 +175,9 @@
     mixins = [api, toastMixin, utilMixin]
 
     data = {
-	  winWidth: 0,
-	  winHeight: 0,
-	  currentTab: 0,
+      winWidth: 0,
+      winHeight: 0,
+      currentTab: 0,
       Map: {
         1: '待审核',
         2: '审核不通过',
@@ -198,42 +200,32 @@
           url: `./orderInfo?id=${id}&type=1&title=title`
         })
       },
-	  /**
-		* 滑动切换tab
-	  */
-	  bindChange: function( e ) {
-      let that = this
-      // that.setData( { currentTab: e.detail.current })
-      that.currentTab = e.detail.current
-	  },
+      /**
+      * 滑动切换tab
+      */
+      bindChange: function(e) {
+        let that = this
+        // that.setData( { currentTab: e.detail.current })
+        that.currentTab = e.detail.current
+      },
 
-	  /**
-	   * 点击tab切换
-	   */
-	  swichNav: function( e ) {
-      let that = this
-      if (this.currentTab === e.target.dataset.current) {
-        return false
-      } else {
-        /*that.setData( {
-          currentTab: e.target.dataset.current
-        })*/
-        that.currentTab = e.target.dataset.current
-      }
-	  },
+      /**
+       * 点击tab切换
+       */
+      swichNav: function(e) {
+        let that = this
+        if (this.currentTab === e.target.dataset.current) {
+          return false
+        } else {
+          that.currentTab = e.target.dataset.current
+        }
+      },
 
       Approve (id) {
         this.$navigate({
           url: `./orderInfo?id=${id}&title=title`
         })
       }
-
-      // tap (id) {
-      //   console.log(id)
-      //   this.$navigate({
-      //     url: `./orderAuthorize?id=${id}`
-      //   })
-      // }
     }
 
     onShow () {
@@ -245,7 +237,7 @@
         if (that.list.length === 0) {
           that.selfToast('当前没有要处理的预约单', 'none')
         } else {
-		  that.pendingApproveList = that.list.filter(item => item.status === "1" )
+      that.pendingApproveList = that.list.filter(item => item.status === "1" )
 		  that.approvedList = that.list.filter(item => item.status === "2" || item.status === "3" || item.status === "4" )
 		  that.completedList = that.list.filter(item => item.status === "5" )
 		  that.expiredList = that.list.filter(item => item.status === "6" )

@@ -60,26 +60,24 @@
   <view>
 
     <scroll-view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
-      <view class="tab-item {{currentTab === 0?'active':''}}"  data-current="0" @tap="swichNav">待审核</view>
+      <view class="tab-item {{currentTab === 0?'active':''}}" data-current="0" @tap="swichNav">待审核</view>
       <view class="tab-item {{currentTab === 1?'active':''}}" data-current="1" @tap="swichNav">不通过</view>
       <view class="tab-item {{currentTab === 2?'active':''}}" data-current="2" @tap="swichNav">已通过</view>
-      <view class="tab-item {{currentTab === 4?'active':''}}" data-current="4" @tap="swichNav">已完成</view>
-      <view class="tab-item {{currentTab === 5?'active':''}}" data-current="5" @tap="swichNav">已过期</view>
+      <view class="tab-item {{currentTab === 3?'active':''}}" data-current="3" @tap="swichNav">已完成</view>
+      <view class="tab-item {{currentTab === 4?'active':''}}" data-current="4" @tap="swichNav">已过期</view>
     </scroll-view>
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
-      <swiper-item wx:for="{{[0,1,2,3,4,5]}}" wx:key="index">
+      <swiper-item wx:for="{{[0,1,2,3,4]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
           <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) === currentTab}}">
             <view class="order">
-              <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view>
-              <view>
-                <text>访客姓名：</text>{{item.visitorName}}
+              <!-- <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view> -->
+              <view style="color: #999">
+                <text>访客姓名：</text>{{item.visitorName}} ({{item.visitorMobile}})
               </view>
-              <view><text>访客手机号：</text>{{item.visitorMobile}}</view>
-              <view><text>来访开始时间：</text>{{item.appointStartTime}}</view>
-              <view><text>来访结束时间：</text>{{item.appointEndTime}}</view>
-              <view class="first"><text>来访事由：</text>{{item.remark}} </view>
+              <view style="color: #999"><text>来访开始时间：</text>{{item.appointStartTime}}</view>
               <view class="bottom">
+                <view @tap="Approve('{{item.id}}')" wx:if="{{item.status === '1'}}">审批</view>
                 <view @tap="notApprove('{{item.id}}')">查看</view>
               </view>
             </view>
@@ -138,16 +136,6 @@
         })
       },
 
-      tap (id, status) {
-        if (status !== '1') {
-          return
-        }
-        console.log(id)
-        this.$navigate({
-          url: `./orderAuthorize?id=${id}`
-        })
-      },
-
       // 滚动切换标签样式
       switchTab (e) {
         this.currentTab = e.detail.current
@@ -156,18 +144,25 @@
       // 点击标题切换当前页时改变样式
       swichNav (e) {
         var cur = e.target.dataset.current
+        console.log(cur)
         if (this.currentTaB === cur) {
           return false
         } else {
           this.currentTab = cur
         }
+      },
+
+      Approve (id) {
+        this.$navigate({
+          url: `./orderInfo?id=${id}&title=title`
+        })
       }
     }
 
     // 判断当前滚动超过一屏时，设置tab标题滚动条。
     checkCor () {
-      if (this.currentTab > 3) {
-        this.scrollLeft = 300
+      if (this.currentTab > 2) {
+        this.scrollLeft = 200
       } else {
         this.scrollLeft = 0
       }
@@ -178,7 +173,7 @@
       const openId = wepy.getStorageSync('openid')
       that.roleId = wepy.getStorageSync('roleId')
       console.log(that.roleId)
-      that.getOrderList(openId, 1).then(res => {
+      that.getOrderList(openId, that.roleId).then(res => {
         console.log(res)
         that.list = res.data.page.list
         if (!that.list || !that.list.length) {
