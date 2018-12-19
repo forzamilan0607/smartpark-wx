@@ -73,11 +73,14 @@
             <view class="order">
               <!-- <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view> -->
               <view style="color: #999">
+                <text>预约单号：</text>{{item.reservationNo}}
+              </view>
+              <view style="color: #999">
                 <text>访客姓名：</text>{{item.visitorName}} ({{item.visitorMobile}})
               </view>
               <view style="color: #999"><text>来访开始时间：</text>{{item.appointStartTime}}</view>
               <view class="bottom">
-                <view @tap="Approve('{{item.id}}')" wx:if="{{item.status === '1'}}">审批</view>
+                <view @tap="Approve('{{item.id}}')" wx:if="{{item.status === '1' && roleId !== 1}}">审批</view>
                 <view @tap="notApprove('{{item.id}}')">查看</view>
               </view>
             </view>

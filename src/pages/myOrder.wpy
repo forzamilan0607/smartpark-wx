@@ -484,7 +484,7 @@
       // tap mark
       mark () {
         this.search = false
-		this.staff_mobile_focus = false
+		    this.staff_mobile_focus = false
         this.$apply()
       },
 
@@ -557,7 +557,7 @@
               that.selfToast('请输入车牌号', 'none')
               return false
             }
-			if (!that.isVehicleNumber(item.carNo)) {
+			      if (!that.isVehicleNumber(item.carNo)) {
               that.selfToast('[' + item.carNo + ']不是有效的车牌号', 'none')
               return false
             }
@@ -604,9 +604,12 @@
         that.saveVisitor(param).then(res => {
           console.log(res, '保存预约')
           if (res.data.code === 200) {
-            that.$redirect({
-              url: './index'
-            })
+            that.selfToast('预约成功')
+            setTimeout(function () {
+              wx.switchTab({
+                url: './index'
+              })
+            }, 1500)
           } else {
 			      that.selfToast('预约失败，请联系管理员！', 'none')
           }
