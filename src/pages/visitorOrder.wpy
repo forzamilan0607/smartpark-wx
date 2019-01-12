@@ -130,7 +130,7 @@
               <!-- <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view> -->
               <view class="cardNo">
                 <text>预约单号：</text>{{item.reservationNo}}
-                <view class="status">{{item.status}}</view>
+                <view class="status">{{Map[item.status]}}</view>
               </view>
               <view class="nameView">
                 <view class="visitorName">
@@ -229,7 +229,7 @@
     // 判断当前滚动超过一屏时，设置tab标题滚动条。
     checkCor () {
       if (this.currentTab > 2) {
-        this.scrollLeft = 200
+        this.scrollLeft = 100
       } else {
         this.scrollLeft = 0
       }
