@@ -237,11 +237,11 @@
         if (that.list.length === 0) {
           that.selfToast('当前没有要处理的预约单', 'none')
         } else {
-      that.pendingApproveList = that.list.filter(item => item.status === "1" )
-		  that.approvedList = that.list.filter(item => item.status === "2" || item.status === "3" || item.status === "4" )
-		  that.completedList = that.list.filter(item => item.status === "5" )
-		  that.expiredList = that.list.filter(item => item.status === "6" )
-		}
+          that.pendingApproveList = that.list.filter(item => item.status === '1')
+          that.approvedList = that.list.filter(item => item.status === '2' || item.status === '3' || item.status === '4')
+          that.completedList = that.list.filter(item => item.status === '5')
+          that.expiredList = that.list.filter(item => item.status === '6')
+        }
         that.$apply()
       })
     }
@@ -251,12 +251,12 @@
       /**
        * 获取系统信息
        */
-      wx.getSystemInfo( {
-        success: function( res ) {
+      wx.getSystemInfo({
+        success: function(res) {
           that.winWidth = res.windowWidth
           that.winHeight = res.windowHeight
         }
-      });
+      })
     }
   }
 </script>

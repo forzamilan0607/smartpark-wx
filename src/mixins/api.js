@@ -14,7 +14,8 @@ export default class Api extends wepy.mixin {
     that.showLoading()
     let header = {
       'Content-type': 'application/json',
-      'token': wepy.getStorageSync('token')
+      'token': wepy.getStorageSync('token'),
+      'openId': wepy.getStorageSync('openid')
     }
     if (flag) {
       header = {

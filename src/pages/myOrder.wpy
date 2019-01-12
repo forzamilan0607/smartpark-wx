@@ -1,11 +1,30 @@
 <style lang="less">
-  .main {
-    padding: 10rpx 20rpx;
+  page {
+    background-color: #00479D;
+    padding: 10rpx;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .module {
+    border-radius: 20rpx;
     background-color: #fff;
+    box-sizing: border-box;
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
+    padding: 0 18rpx;
+    .title {
+      font-size: 32rpx;
+      line-height: 50rpx;
+      font-weight: 600;
+      text-indent: .5em;
+    }
+  }
+  .main {
+    box-sizing: border-box;
   }
   .inputGroup {
     display: flex;
-    padding: 18rpx;
+    padding: 18rpx 0;
     /**border-bottom: 1px solid #f4f4f4;**/
     text {
       flex: 1;
@@ -50,16 +69,20 @@
     z-index: 100;
     width: 100%;
     height: 100%;
+    padding: 0 20rpx;
+    box-sizing: border-box;
     top: 0;
     left: 0;
-    background: #00000080;
+    background: #000;
+    opacity: .9;
     .searchView {
       z-index: 111;
       padding: 40rpx;
-      width: 70%;
       border-radius: 20rpx;
       background-color: #fff;
       margin: 300rpx auto;
+      margin-bottom: 40rpx;
+      opacity: 1;
       input {
         /**border-bottom: 1px solid #f4f4f4;**/
         width: 100%;
@@ -67,26 +90,29 @@
         text-align: center;
         color: #666;
       }
-      .basestaff {
-        margin-top: 20rpx;
-        font-size: 14px;
-        text-align: center;
-        color: #1c5aa5;
-        line-height: 60rpx;
-      }
+    }
+    .basestaff {
+      margin-top: 20rpx;
+      font-size: 14px;
+      text-align: center;
+      color: #1c5aa5;
+      background-color: #fff;
+      padding: 40rpx;
+      border-radius: 20rpx;
     }
   }
 
   .choose {
-    background: #00479D;
-    height: 50rpx;
-    line-height: 50rpx;
-    font-size: 14px;
-    text-align: center;
-    color: #fff;
-    border-radius: 10rpx;
-    width: 50%;
-    margin: 40rpx auto;
+    background:#fff;
+    height:60rpx;
+    line-height:60rpx;
+    font-size:16px;
+    text-align:center;
+    color:#00479D;
+    border-radius:20rpx;
+    width:50%;
+    margin:30rpx auto;
+    font-weight: 600;
   }
 
   .choose2 {
@@ -97,8 +123,9 @@
   }
 
   .carCard {
-    border: 1px solid #f4f4f4;
-	  margin-bottom: 10px;
+    border-radius: 20rpx;
+    border: 1px solid #00479D;
+	  margin: 20rpx 0;
   }
 
   .addButton {
@@ -119,106 +146,128 @@
     width: 35rpx;
     height: 35rpx;
   }
-
+  .padding {
+    padding-bottom: 20rpx;
+  }
+  .addCar {
+    background-color: #fff;
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
+    text-align:right;
+    padding-right:30rpx;
+    box-sizing:border-box;
+  }
 </style>
 
 <template>
   <view class="main">
-    <view class="inputGroup">
-      <text>被访人：</text>
-      <input class="input input-search" value="{{form.staffName}}" placeholder="必填" bindfocus="bindfocus"/>
-    </view>
+    <!-- 被访人信息 -->
+    <view class="module">
+      <view class="title">被访人信息</view>
+      <view class="inputGroup">
+        <text>被访人：</text>
+        <input class="input input-search" value="{{form.staffName}}" placeholder="必填" bindfocus="bindfocus"/>
+      </view>
 
-    <view class="inputGroup">
-      <text>姓名：</text>
-      <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')" bindblur="fillCarInfo('name')"/>
-    </view>
+      <view class="inputGroup">
+        <text>来访开始时间：</text>
+        <view class="pick">
+          <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
+                bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}</picker>
+        </view>
+      </view>
 
-    <view class="inputGroup">
-      <text class="mobile">身份证：</text>
-      <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
-      <text class="getCode" @tap="photo">点击拍照</text>
-    </view>
+      <view class="inputGroup">
+        <text>来访结束时间：</text>
+        <view class="pick">
+          <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
+                bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointEndTime}}</picker>
+        </view>
+      </view>
 
-    <view class="inputGroup">
-      <text class="mobile">手机号：</text>
-      <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')" bindblur="fillCarInfo('phone')"/>
-      <text class="getCode" @tap="getCode">{{text}}验证码</text>
+      <view class="inputGroup">
+        <text>来访事由：</text>
+        <input class="input" placeholder="必填" value="{{remark}}" bindinput="bindInput('remark')"/>
+      </view>
     </view>
+   
+    <!-- 访客信息 -->
+    <view class="module">
+      <view class="title">访客信息</view>
+      <view class="inputGroup">
+        <text>姓名：</text>
+        <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')" bindblur="fillCarInfo('name')"/>
+      </view>
 
-    <view class="inputGroup">
-      <text>验证码：</text>
-      <input class="input" placeholder="必填" value="{{form.verifyCode}}" bindinput="bindInput('verifyCode')"/>
-    </view>
+      <view class="inputGroup">
+        <text class="mobile">身份证：</text>
+        <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
+        <text class="getCode" @tap="photo">点击拍照</text>
+      </view>
 
-    <view class="inputGroup">
-      <text>来访开始时间：</text>
-      <view class="pick">
-        <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
-              bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}</picker>
+      <view class="inputGroup">
+        <text class="mobile">手机号：</text>
+        <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')" bindblur="fillCarInfo('phone')"/>
+        <text class="getCode" @tap="getCode">{{text}}验证码</text>
+      </view>
+
+      <view class="inputGroup">
+        <text>验证码：</text>
+        <input class="input" placeholder="必填" value="{{form.verifyCode}}" bindinput="bindInput('verifyCode')"/>
+      </view>
+
+      <view class="inputGroup">
+        <text>来访人数：</text>
+        <input class="input" placeholder="选填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
       </view>
     </view>
 
-    <view class="inputGroup">
-      <text>来访结束时间：</text>
-      <view class="pick">
-        <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
-              bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointEndTime}}</picker>
-      </view>
-    </view>
-
-    <view class="inputGroup">
-      <text>来访事由：</text>
-      <input class="input" placeholder="必填" value="{{remark}}" bindinput="bindInput('remark')"/>
-    </view>
-
-    <view class="inputGroup">
-      <text>来访人数：</text>
-      <input class="input" placeholder="选填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
-    </view>
-
-    <view class="inputGroup">
+    <view class="inputGroup addCar">
       <text>是否添加车辆：</text>
-      <switch checked bindchange="switchChange"/>
+      <switch bindchange="switchChange"/>
     </view>
 
-    <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="index">
-	  <view class="inputGroup">
-        <text>车辆信息{{index + 1}}:</text>
-        <!-- <view  class="addButton" ></view> -->
-        <view class="addButton">
-			<image class="myimg" style="margin-right:15rpx;" src="../assets/images/delete.png" wx:if="{{index > 0}}" @tap="deleteCar('{{index}}')"/>
-			<image class="myimg" src="../assets/images/add.png" @tap="addCar"/>
-		</view>
-      </view>
+    <!-- 车辆相关 -->
+    <view class="module padding" wx:if="{{carCard}}">
+      <view class="title">车辆信息</view>
 
-      <view class="inputGroup">
-        <text>车牌号：</text>
-        <input class="input" placeholder="必填" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
-      </view>
-      <view class="inputGroup">
-        <text>驾驶员：</text>
-        <input class="input" placeholder="必填" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
-      </view>
-      <view class="inputGroup">
-        <text>手机号：</text>
-        <input class="input" placeholder="必填" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
-      </view>
-      <view wx:if="{{index == 0}}" class="inputGroup">
-        <text>与访客一致：</text>
-        <switch bindchange="switchChangeCar"/>
+      <view class="carCard" wx:for="{{form.carInfoEntitys}}" wx:key="index">
+        <view class="inputGroup">
+          <text>车辆信息{{index + 1}}:</text>
+          <view class="addButton">
+            <image class="myimg" style="margin-right:15rpx;" src="../assets/images/delete.png" wx:if="{{index > 0}}" @tap="deleteCar('{{index}}')"/>
+            <image class="myimg" src="../assets/images/add.png" @tap="addCar"/>
+          </view>
+        </view>
+
+        <view class="inputGroup">
+          <text>车牌号：</text>
+          <input class="input" placeholder="必填" value="{{item.carNo}}" bindinput="bindInputCar('carNo', {{index}})"/>
+        </view>
+        <view class="inputGroup">
+          <text>驾驶员：</text>
+          <input class="input" placeholder="必填" value="{{item.name}}" bindinput="bindInputCar('name', {{index}})"/>
+        </view>
+        <view class="inputGroup">
+          <text>手机号：</text>
+          <input class="input" placeholder="必填" value="{{item.phone}}" bindinput="bindInputCar('phone', {{index}})"/>
+        </view>
+        <view wx:if="{{index == 0}}" class="inputGroup">
+          <text>与访客一致：</text>
+          <switch bindchange="switchChangeCar"/>
+        </view>
       </view>
     </view>
 
     <!-- mark -->
     <view class="mark" wx:if="{{search}}" @tap="mark">
       <view class="searchView" catchtap="catch">
-        <input style="color:#1c5aa5;" focus="{{staff_mobile_focus}}" value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile"/>
-        <view class="basestaff" wx:if="{{basetype}}">
-          <text>被访人信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
-        </view>
-        <view class="choose" wx:if="{{basetype}}" catchtap="choose">选择</view>
+        <input style="color:#1c5aa5;" focus="{{staff_mobile_focus}}" value="{{ searchMobile }}" placeholder="输入手机号查询员工信息" bindinput="checkMobile" placeholder-style="color: #000;"/>
       </view>
+      <view class="basestaff" wx:if="{{basetype}}">
+        <text>被访人信息: \t{{basestaff.username}} \t {{basestaff.mobile}}</text>
+      </view>
+      <view class="choose" wx:if="{{basetype}}" catchtap="choose">选择</view>
     </view>
 
     <view class="choose" @tap="submit">提交预约</view>
@@ -282,48 +331,38 @@
       },
       basestaff: {},    // 员工信息
       basetype: false,  // 判断是否展示员工信息栏
-      carCard: true,   // 开关
-	    sameWithVisitor: false,
+      carCard: false,   // 开关
+      sameWithVisitor: false,
       startDate: '请选择日期',
       multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
       multiIndex: [0, 0, 0],
-	    staff_mobile_focus: false
+      staff_mobile_focus: false
     }
 
     methods = {
       // input
       bindInput (val, e) {
-        console.log(e, val)
         this.form[val] = e.detail.value
         this.$apply()
-        console.log(this.form[val])
       },
 
       bindInputCar (val, index, e) {
-        console.log(e, val, index)
-        console.log(index, 111)
-        console.log(val)
         this.form.carInfoEntitys[index][val] = e.detail.value
         this.$apply()
-        console.log(this.form.carInfoEntitys[val])
       },
 
       // choose
       choose () {
-        console.log('点到了')
         let that = this
         that.search = false
-		this.staff_mobile_focus = false
+        this.staff_mobile_focus = false
         that.form.staffPhone = that.basestaff.mobile
         that.form.staffName = that.basestaff.username
         that.$apply()
-        console.log(that.form.staffPhone)
-        console.log(that.form.staffName)
       },
 
       // textarea
       bindArea (e) {
-        console.log(e.detail.value)
       },
 
       // getCode
@@ -367,20 +406,20 @@
         that.$apply()
       },
 
-	    deleteCar (index) {
+      deleteCar (index) {
         let that = this
         that.form.carInfoEntitys.splice(index, 1)
         that.$apply()
       },
 
-	    fillCarInfo (val, e) {
-		    let that = this
-		    if (that.sameWithVisitor) {
-			    val === 'name' ? that.form.carInfoEntitys[0].name = e.detail.value : that.form.carInfoEntitys[0].phone = e.detail.value
-		    }
-		  },
+      fillCarInfo (val, e) {
+        let that = this
+        if (that.sameWithVisitor) {
+          val === 'name' ? that.form.carInfoEntitys[0].name = e.detail.value : that.form.carInfoEntitys[0].phone = e.detail.value
+        }
+      },
       switchChangeCar (e) {
-		    let that = this
+        let that = this
         that.sameWithVisitor = e.detail.value
         if (that.sameWithVisitor) {
           that.form.carInfoEntitys[0].name = that.form.name
@@ -407,25 +446,21 @@
 
       // chooseDate
       bindDateChange (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
         this.form.appointStartTime = e.detail.value
         this.$apply()
       },
 
       // chooseDate
       bindEndDateChange (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
         this.form.appointEndTime = e.detail.value
         this.$apply()
       },
 
       checkMobile (e) {
         let that = this
-        console.log(e.detail.value.length)
         if (e.detail.value.length === 11) {
           if (that.checkMobile(e.detail.value).result) {
             that.queryByMobile(e.detail.value).then(res => {
-              console.log(res, '被访人姓名')
               if (res.data.data) {
                 that.basetype = true
                 that.basestaff = res.data.data
@@ -470,7 +505,7 @@
             } else {
               that.selfToast('输入的身份证号不正确', 'none')
             }
-			    })
+          })
         }
       },
 
@@ -484,7 +519,7 @@
       // tap mark
       mark () {
         this.search = false
-		    this.staff_mobile_focus = false
+        this.staff_mobile_focus = false
         this.$apply()
       },
 
@@ -542,22 +577,22 @@
           that.selfToast('结束时间必须大于开始时间', 'none')
           return false
         }
-        /*let diffTime = appointEndTime - appointStartTime
+        /* let diffTime = appointEndTime - appointStartTime
         let leave1 = diffTime % (24 * 3600 * 1000)
         let hours = Math.floor(leave1 / (3600 * 1000))
         if (hours < 2) {
           that.selfToast('结束时间和开始时间必须相差 2 小时以上', 'none', 'none')
           return false
-        }*/
+        } */
         // 添加车牌信息，则需要校验必填项
         if (that.carCard) {
-			    for (let i = 0; i < that.form.carInfoEntitys.length; i++) {
+          for (let i = 0; i < that.form.carInfoEntitys.length; i++) {
             let item = that.form.carInfoEntitys[i]
             if (!item.carNo) {
               that.selfToast('请输入车牌号', 'none')
               return false
             }
-			      if (!that.isVehicleNumber(item.carNo)) {
+            if (!that.isVehicleNumber(item.carNo)) {
               that.selfToast('[' + item.carNo + ']不是有效的车牌号', 'none')
               return false
             }
@@ -611,7 +646,7 @@
               })
             }, 1500)
           } else {
-			      that.selfToast('预约失败，请联系管理员！', 'none')
+            that.selfToast('预约失败，请联系管理员！', 'none')
           }
         })
       }

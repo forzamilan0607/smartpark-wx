@@ -1,12 +1,31 @@
 <style lang="less">
+page {
+  background-color: #00479D;
+  padding: 10rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
 .main {
-  padding: 10rpx 20rpx;
+  box-sizing: border-box;
+}
+.module {
+  border-radius: 20rpx;
   background-color: #fff;
+  box-sizing: border-box;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  padding: 0 18rpx;
+  .title {
+    font-size: 32rpx;
+    line-height: 50rpx;
+    font-weight: 600;
+    text-indent: .5em;
+  }
 }
 .inputGroup {
   display: flex;
   padding: 18rpx;
-  /**border-bottom: 1px solid #f4f4f4;**/
+/**border-bottom: 1px solid #f4f4f4;**/
   text {
     flex: 1;
     font-size: 14px;
@@ -14,30 +33,30 @@
     height: 50rpx;
     line-height: 50rpx;
   }
-.input {
+  .input {
     flex: 2;
     font-size: 14px;
   }
   switch {
     flex: 2;
   }
-.mobileInput {
+  .mobileInput {
     flex: 4;
   }
-.getCode {
+  .getCode {
     flex: 2;
     font-size: 12px;
     color: #00479D;
     border-left: 1px solid #eee;
   }
-.mobile {
+  .mobile {
     flex: 3;
   }
-.pick {
+  .pick {
     flex: 2;
-	color: #1c5aa5;
-	border-bottom: 1px solid black;
-  .picker {
+	  color: #1c5aa5;
+	  border-bottom: 1px solid black;
+    .picker {
       font-size: 14px;
       color: #666;
       height: 1.4rem;
@@ -80,19 +99,22 @@
 }
 
 .choose {
-  background: #00479D;
-  height: 50rpx;
-  line-height: 50rpx;
-  font-size: 14px;
+  background: #fff;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 32rpx;
   text-align: center;
-  color: #fff;
-  border-radius: 10rpx;
-  width: 33%;
-  margin: 40rpx auto;
-  display: inline-block;
-  margin-left: 11%;
+  color: #00479D;
+  border-radius: 20rpx;
+  width: 30%;
+  text-align: center;
+  font-weight: 600;
 }
 
+.chooseGroup {
+  display: flex;
+  justify-content: space-around;
+}
 .choosee {
   margin-left: auto;
   display: block;
@@ -119,89 +141,101 @@
 
 <template>
 <view class="main">
-  <view class="inputGroup">
-    <text>被访人姓名：</text>
-    <input class="input" placeholder="必填" value="{{form.staffName}}" disabled bindinput="bindInput('name')"/>
-  </view>
-  <view class="inputGroup">
-    <text>访客姓名：</text>
-    <input class="input" placeholder="必填" value="{{form.name}}" disabled bindinput="bindInput('name')"/>
+  <!-- 被访人信息 -->    
+  <view class="module">
+    <view class="title">被访人信息</view>
+
+    <view class="inputGroup">
+      <text>被访人姓名：</text>
+      <input class="input" placeholder="必填" value="{{form.staffName}}" disabled bindinput="bindInput('name')"/>
+    </view>
+
+    <view class="inputGroup" wx:if="{{!type}}">
+      <text>来访开始时间：</text>
+      <view class="pick">
+        <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
+          bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}
+        </picker>
+      </view>
+    </view>
+
+    <view class="inputGroup" wx:if="{{!type}}">
+      <text>来访结束时间：</text>
+      <view class="pick">
+        <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
+          bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointEndTime}}
+        </picker>
+      </view>
+    </view>
+
+    <view class="inputGroup" wx:if="{{type}}">
+      <text>来访开始时间：</text>
+      <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
+    </view>
+
+    <view class="inputGroup" wx:if="{{type}}">
+      <text>来访结束时间：</text>
+      <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访事由：</text>
+      <input class="input" placeholder="选填" disabled value="{{form.remark}}" bindinput="bindInput('remark')"/>  
+    </view>
   </view>
 
-  <view class="inputGroup">
-    <text>身份证：</text>
-    <input class="input" placeholder="必填" value="{{form.idcardNo}}" disabled bindinput="bindInput('idcardNo')"/>
-  <!-- <text class="getCode" @tap="photo">点击拍照</text> -->
+  <!-- 访客信息 -->
+  <view class="module">
+    <view class="title">访客信息</view>
+    <view class="inputGroup">
+      <text>访客姓名：</text>
+      <input class="input" placeholder="必填" value="{{form.name}}" disabled bindinput="bindInput('name')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>身份证：</text>
+      <input class="input" placeholder="必填" value="{{form.idcardNo}}" disabled bindinput="bindInput('idcardNo')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>手机号：</text>
+      <input class="input" placeholder="必填" value="{{form.phone}}" disabled bindinput="bindInput('phone')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>来访人数：</text>
+      <input class="input" placeholder="必填" type="number" value="{{form.companions}}" disabled bindinput="bindInput('companions')"/>
+    </view>
   </view>
 
-  <view class="inputGroup">
-    <text>手机号：</text>
-    <input class="input" placeholder="必填" value="{{form.phone}}" disabled bindinput="bindInput('phone')"/>
-  <!-- <text class="getCode">{{text}}验证码</text> -->
-  </view>
+  <!-- 车辆信息 -->
+  <view class="module">
+    <view class="title">车辆信息</view>
 
-  <view class="inputGroup" wx:if="{{!type}}">
-    <text>来访开始时间：</text>
-  <view class="pick">
-    <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
-  bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointStartTime}}</picker>
+    <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
+
+    <view class="inputGroup">
+      <text style="text-align: left;">车辆{{index + 1}}:</text>
+    </view>
+
+    <view class="inputGroup">
+      <text>车牌号：</text>
+      <input class="input" placeholder="必填" type="number" disabled  value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>驾驶员：</text>
+      <input class="input" placeholder="必填" disabled type="number" value="{{item.name}}" bindinput="bindInputCar('name')"/>
+    </view>
+
+    <view class="inputGroup">
+      <text>手机号：</text>
+      <input class="input" placeholder="必填" disabled type="number" value="{{item.phone}}" bindinput="bindInputCar('phone')"/>
+    </view>
   </view>
 </view>
 
-<view class="inputGroup" wx:if="{{!type}}">
-  <text>来访结束时间：</text>
-<view class="pick">
-  <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
-bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{form.appointEndTime}}</picker>
-</view>
-</view>
-
-<view class="inputGroup" wx:if="{{type}}">
-  <text>来访开始时间：</text>
-  <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
-</view>
-
-<view class="inputGroup" wx:if="{{type}}">
-  <text>来访结束时间：</text>
-  <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
-</view>
-
-<view class="inputGroup">
-  <text>来访事由：</text>
-<input class="input" placeholder="选填" disabled value="{{form.remark}}" bindinput="bindInput('remark')"/>
-  </view>
-
-  <view class="inputGroup">
-  <text>来访人数：</text>
-<input class="input" placeholder="必填" type="number" value="{{form.companions}}" disabled bindinput="bindInput('companions')"/>
-  </view>
-<!--
-  <view class="inputGroup" wx:if="{{carCard}}">
-  <text style="text-align:left">车辆信息</text>
-  </view>
-  -->
-
-  <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
-  <view class="inputGroup">
-    <text style="text-align: left;">车辆信息{{index + 1}}:</text>
-  </view>
-  <view class="inputGroup">
-    <text>车牌号：</text>
-    <input class="input" placeholder="必填" type="number" disabled  value="{{item.carNo}}" bindinput="bindInputCar('carNo')"/>
-  </view>
-  <view class="inputGroup">
-  <text>驾驶员：</text>
-<input class="input" placeholder="必填" disabled type="number" value="{{item.name}}" bindinput="bindInputCar('name')"/>
-  </view>
-  <view class="inputGroup">
-  <text>手机号：</text>
-<input class="input" placeholder="必填" disabled type="number" value="{{item.phone}}" bindinput="bindInputCar('phone')"/>
-  </view>
-  <!-- <view class="inputGroup">
-  <text>与访客一致：</text>
-<switch checked bindchange="switchChangeCar"/>
-  </view> -->
-  </view>
+  
 
   <!-- mark -->
   <view class="mark" wx:if="{{search}}" @tap="mark">
@@ -210,15 +244,17 @@ bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{m
   <view class="choosee choose" catchtap="choose">确定</view>
   </view>
   </view>
-
-  <view class="choose" @tap="submit" wx:if="{{!type}}">授权</view>
-  <view class="choose" @tap="reject" wx:if="{{!type}}">拒绝</view>
+  
+  <view class="chooseGroup">
+    <view class="choose" @tap="submit" wx:if="{{!type}}">授权</view>
+    <view class="choose" @tap="reject" wx:if="{{!type}}">拒绝</view>
+  </view>
 
   <!-- <camera wx:if="{{camera}}" device-position="back" binderror="error" style="width:80%;height:200px;position:fixed;top:100px;left:54rpx;z-index:1000;padding:10px;"></camera> -->
-  </view>
-  </template>
+</view>
+</template>
 
-  <script>
+<script>
 import wepy from 'wepy'
 import utilMixin from '../mixins/util'
 import toastMixin from '../mixins/toast'

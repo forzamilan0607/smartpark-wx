@@ -2,6 +2,7 @@
   page {
     background-color: #f7f7f7;
     padding: 20rpx;
+    box-sizing: border-box;    
   }
   .order {
     background-color: #fff;
@@ -10,16 +11,71 @@
     color: #333;
     line-height: 60rpx;
     margin-bottom: 20rpx;
-    padding: 20rpx;
+    padding: 10rpx;
     border-radius: 20rpx;
-    width: 88%;
-    // view {
-    //   text {
-    //     display: inline-block;
-    //     width: 30%;
-    //     text-align: right;
-    //   }
-    // }
+    .cardNo {
+      border-bottom: 1px solid #ccc;
+      font-size: 24rpx;
+      line-height: 40rpx;
+      box-sizing: border-box;
+      padding: 0 10rpx;
+      position: relative;
+      .status {
+        position: absolute;
+        right: -10rpx;
+        top: -10rpx;
+        height: 50rpx;
+        line-height: 50rpx;
+        background-color: #ccc;
+        color: #f4f4f4;
+        font-size: 24rpx;
+        text-align: center;
+        width: 20%;
+        border-top-right-radius: 20rpx;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+    .nameView {
+      box-sizing: border-box;
+      padding: 30rpx 0 10rpx 0;
+      display: flex;
+      justify-content: space-around;
+      .visitorName {
+        view:nth-child(1) {
+          line-height: 60rpx;
+          font-size: 40rpx;
+          font-weight: 700;
+          color: #000;
+          text-align: center;
+        }
+        view:nth-child(2) {
+          font-size: 20rpx;
+          color: #b9b9b9;
+          text-align: center;
+        }
+      }
+      .timg {
+        line-height: 80rpx;
+        image {
+          width: 100rpx;
+          height: 40rpx;
+        }
+      }
+      .interviewee {
+        line-height: 70rpx;
+        font-size: 40rpx;
+        font-weight: 700;
+        color: #000;
+      }
+    }
+    .time {
+      font-size: 24rpx;
+      color: #b9b9b9;
+      text-indent: 1em;
+      text {
+        color: #333;
+      }
+    }
     .first {
       text view{
         float: right;
@@ -52,8 +108,8 @@
   .expertInfo .name{font-size: 16px;color:#000;margin-bottom: 6px;}
   .askBtn{ width: 120rpx;height: 60rpx;line-height: 60rpx;text-align: center;font-size: 14px; border-radius: 60rpx;border: 1px solid #00479D; color:#00479D;}
   .tab-content{margin-top: 80rpx;}
-  .scoll-h{height: 100%;}
-  .visitor{height: 80rpx;line-height: 80rpx;text-align: center;width: 33%;border-radius: 20rpx;background-color: #00479D;color: #fff;font-size: 16px;position: fixed;bottom: 60rpx;left: 33%;z-index: 100;}
+  .scoll-h{height: 100%;box-sizing: border-box;padding-top: 105rpx;}
+  .visitor{height: 60rpx;line-height: 60rpx;text-align: center;width: 30%;border-radius: 20rpx;background-color: #00479D;color: #fff;font-size: 16px;position: fixed;top: 105rpx;left: 33%;z-index: 100;}
 </style>
 
 <template>
@@ -69,20 +125,28 @@
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
       <swiper-item wx:for="{{[0,1,2,3,4]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
-          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) === currentTab}}">
+          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 2) === currentTab}}" @tap="notApprove('{{item.id}}')">
             <view class="order">
               <!-- <view class="first"><text>状态：</text>{{item.status === "1" ? '待审核' : item.status === "2" ? '审核不通过' : item.status === "3" ? '审核通过' : item.status === "5" ? '已完成' : '已过期'}}</view> -->
-              <view style="color: #999">
+              <view class="cardNo">
                 <text>预约单号：</text>{{item.reservationNo}}
+                <view class="status">{{item.status}}</view>
               </view>
-              <view style="color: #999">
-                <text>访客姓名：</text>{{item.visitorName}} ({{item.visitorMobile}})
+              <view class="nameView">
+                <view class="visitorName">
+                  <view class="name">{{item.visitorName}}</view>
+                  <view class="mobile">{{item.visitorMobile}}</view>
+                </view>
+                <view class="timg">
+                  <image src="../assets/images/timg.jpg"></image>
+                </view>
+                <view class="interviewee">被访人</view>
               </view>
-              <view style="color: #999"><text>来访开始时间：</text>{{item.appointStartTime}}</view>
-              <view class="bottom">
+              <view class="time"><text>来访时间：</text>{{item.appointStartTime}}</view>
+              <!-- <view class="bottom">
                 <view @tap="Approve('{{item.id}}')" wx:if="{{item.status === '1' && roleId !== 1}}">审批</view>
                 <view @tap="notApprove('{{item.id}}')">查看</view>
-              </view>
+              </view> -->
             </view>
 
             <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">暂无预约单！</view>
