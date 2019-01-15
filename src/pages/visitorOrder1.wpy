@@ -219,11 +219,14 @@
       swichNav (e) {
         var cur = e.target.dataset.current
         console.log(cur)
+        console.log(this.currentTab)
         if (this.currentTaB === cur) {
+          console.log(222)
           return false
         } else {
-          this.currentTab = cur
+          this.currentTab = Number(cur)
         }
+        this.$apply()
       },
 
       Approve (id, status) {
