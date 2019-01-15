@@ -81,6 +81,7 @@ page {
     border-radius: 20rpx;
     background-color: #fff;
     margin: 300rpx auto;
+    display: flex;
     input {
       /**border-bottom: 1px solid #f4f4f4;**/
       width: 100%;
@@ -110,10 +111,14 @@ page {
   text-align: center;
   font-weight: 600;
 }
+.choose1 {
+  color: #ed4444;
+}
 
 .chooseGroup {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 20rpx;
 }
 .choosee {
   margin-left: auto;
@@ -141,6 +146,11 @@ page {
 
 <template>
 <view class="main">
+  <view class="chooseGroup">
+    <view class="choose" @tap="submit" wx:if="{{roleId == 2 && status == 1}}">授权</view>
+    <view class="choose choose1" @tap="reject" wx:if="{{roleId == 2 && status == 1}}">拒绝</view>
+  </view>
+
   <!-- 被访人信息 -->    
   <view class="module">
     <view class="title">被访人信息</view>
@@ -150,7 +160,7 @@ page {
       <input class="input" placeholder="必填" value="{{form.staffName}}" disabled bindinput="bindInput('name')"/>
     </view>
 
-    <view class="inputGroup" wx:if="{{!type}}">
+    <view class="inputGroup" wx:if="{{status == 1}}">
       <text>来访开始时间：</text>
       <view class="pick">
         <picker class='time-picker' mode="multiSelector" bindchange="bindAppointStartTimeChange" bindtap='pickerTap'
@@ -159,7 +169,7 @@ page {
       </view>
     </view>
 
-    <view class="inputGroup" wx:if="{{!type}}">
+    <view class="inputGroup" wx:if="{{status == 1}}">
       <text>来访结束时间：</text>
       <view class="pick">
         <picker class='time-picker' mode="multiSelector" bindchange="bindAppointEndTimeChange" bindtap='pickerTap' placeholder="必填"
@@ -168,12 +178,12 @@ page {
       </view>
     </view>
 
-    <view class="inputGroup" wx:if="{{type}}">
+    <view class="inputGroup" wx:if="{{status != 1}}">
       <text>来访开始时间：</text>
       <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointStartTime}}"/>
     </view>
 
-    <view class="inputGroup" wx:if="{{type}}">
+    <view class="inputGroup" wx:if="{{status != 1}}">
       <text>来访结束时间：</text>
       <input class="input" style="font-size: 14px;" placeholder="选填" disabled value="{{form.appointEndTime}}"/>
     </view>
@@ -244,11 +254,6 @@ page {
   <view class="choosee choose" catchtap="choose">确定</view>
   </view>
   </view>
-  
-  <view class="chooseGroup">
-    <view class="choose" @tap="submit" wx:if="{{!type}}">授权</view>
-    <view class="choose" @tap="reject" wx:if="{{!type}}">拒绝</view>
-  </view>
 
   <!-- <camera wx:if="{{camera}}" device-position="back" binderror="error" style="width:80%;height:200px;position:fixed;top:100px;left:54rpx;z-index:1000;padding:10px;"></camera> -->
 </view>
@@ -270,6 +275,8 @@ export default class OrderInfo extends wepy.page {
   mixins = [api, toastMixin, utilMixin]
   data = {
     type: '',
+    roleId: '',
+    status: '',
     curDate: new Date(),
     currentHours: null,
     currentMinute: null,
@@ -448,6 +455,7 @@ export default class OrderInfo extends wepy.page {
   onLoad (options) {
     console.log(options, 'options')
     this.id = options.id
+    this.status = options.status
     this.type = options.type || false
     if (options.title) {
       wepy.setNavigationBarTitle({
@@ -462,6 +470,7 @@ export default class OrderInfo extends wepy.page {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
+    this.roleId = wepy.getStorageSync('roleId')
     console.log(year)
     console.log(month)
     console.log(day)

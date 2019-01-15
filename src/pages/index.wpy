@@ -86,6 +86,10 @@ export default class Menus extends wepy.page {
     // 点击跳转
     sub (url) {
       console.log(url)
+      const roleId = wepy.getStorageSync('roleId')
+      if (url === './visitorOrder' && roleId === 2) {
+        this.$navigate('./visitorOrder1')
+      }
       this.$navigate(url)
     }
   }

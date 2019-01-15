@@ -86,12 +86,21 @@
       view {
         display: inline-block;
         border: 1px solid #eee;
-        background: #00479D;
-        color: #fff;
+        background: #fff;
+        color: #00479D;
         text-align: center;
-        width: 140rpx;
+        width: 120rpx;
+        font-size: 24rpx;
         margin-left: 50rpx;
-        border-radius: 10rpx;
+        border-radius: 20rpx;
+      }
+      .shenpi {
+        background-color: #00479D;
+        color: #fff;
+      }
+      .not {
+        color: #fff;
+        background-color: #ed4444;
       }
     }
   }
@@ -108,7 +117,7 @@
   .expertInfo .name{font-size: 16px;color:#000;margin-bottom: 6px;}
   .askBtn{ width: 120rpx;height: 60rpx;line-height: 60rpx;text-align: center;font-size: 14px; border-radius: 60rpx;border: 1px solid #00479D; color:#00479D;}
   .tab-content{margin-top: 80rpx;}
-  .scoll-h{height: 100%;box-sizing: border-box;padding-top: 105rpx;}
+  .scoll-h{height: 100%;box-sizing: border-box;overflow-y: scroll;}
   .visitor{height: 60rpx;line-height: 60rpx;text-align: center;width: 30%;border-radius: 20rpx;background-color: #00479D;color: #fff;font-size: 16px;position: fixed;top: 105rpx;left: 33%;z-index: 100;}
 </style>
 
@@ -116,16 +125,16 @@
   <view>
 
     <scroll-view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
-      <view class="tab-item {{currentTab === 1?'active':''}}" data-current="1" @tap="swichNav">待审核</view>
-      <view class="tab-item {{currentTab === 2?'active':''}}" data-current="2" @tap="swichNav">不通过</view>
-      <view class="tab-item {{currentTab === 3?'active':''}}" data-current="3" @tap="swichNav">已通过</view>
-      <view class="tab-item {{currentTab === 4?'active':''}}" data-current="4" @tap="swichNav">已完成</view>
-      <view class="tab-item {{currentTab === 5?'active':''}}" data-current="5" @tap="swichNav">已过期</view>
+      <view class="tab-item {{currentTab === 0?'active':''}}" data-current="0" @tap="swichNav">待审核</view>
+      <view class="tab-item {{currentTab === 1?'active':''}}" data-current="1" @tap="swichNav">不通过</view>
+      <view class="tab-item {{currentTab === 2?'active':''}}" data-current="2" @tap="swichNav">已通过</view>
+      <view class="tab-item {{currentTab === 3?'active':''}}" data-current="3" @tap="swichNav">已完成</view>
+      <view class="tab-item {{currentTab === 4?'active':''}}" data-current="4" @tap="swichNav">已过期</view>
     </scroll-view>
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
-      <swiper-item wx:for="{{[1,2,3,4,5]}}" wx:key="index">
+      <swiper-item wx:for="{{[0,1,2,3,4]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
-          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{item.status == currentTab}}" @tap="notApprove('{{item.id}}')">
+          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) == currentTab}}" @tap="notApprove('{{item.id}}','{{item.status}}')">
             <view class="order">
               <view class="cardNo">
                 <text>预约单号：</text>{{item.reservationNo}}
@@ -142,6 +151,10 @@
                 <view class="interviewee">{{item.staffName}}</view>
               </view>
               <view class="time"><text>来访时间：</text>{{item.appointStartTime}}</view>
+              <view class="bottom">
+                <view @tap="Approve('{{item.id}}','{{item.status}}')" class="shenpi" wx:if="{{item.status === '1'}}">审批</view>
+                <view @tap="notApprove('{{item.id}}','{{item.status}}')" class="not" wx:if="{{item.status === '1'}}">拒绝</view>
+              </view>
             </view>
 
             <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">暂无预约单！</view>
@@ -159,9 +172,9 @@
   import toastMixin from '../mixins/toast'
   import api from '../mixins/api'
 
-  export default class VisitorOrder extends wepy.page {
+  export default class VisitorOrder1 extends wepy.page {
     config = {
-      navigationBarTitleText: '预约',
+      navigationBarTitleText: '预约单',
       navigationBarBackgroundColor: '#00479D',
       navigationBarTextStyle: 'white'
     }
@@ -178,16 +191,16 @@
       },
       list: [],
       winHeight: '', // 窗口高度
-      currentTab: 1, // 预设当前项的值
+      currentTab: 0, // 预设当前项的值
       scrollLeft: 0, // tab标题的滚动条位置
       roleId: ''
     }
 
     methods = {
       // 查看
-      notApprove (id) {
+      notApprove (id, status) {
         this.$navigate({
-          url: `./orderInfo?id=${id}&type=1`
+          url: `./orderInfo?id=${id}&status=${status}`
         })
       },
 
@@ -213,9 +226,9 @@
         }
       },
 
-      Approve (id) {
+      Approve (id, status) {
         this.$navigate({
-          url: `./orderInfo?id=${id}&title=title`
+          url: `./orderInfo?id=${id}&status=${status}`
         })
       }
     }
@@ -237,8 +250,12 @@
       that.getOrderList(openId, that.roleId).then(res => {
         console.log(res)
         that.list = res.data.page.list
+        console.log(that.list.length)
         if (!that.list || !that.list.length) {
           that.selfToast('您当前还没有预约单', 'none')
+          setTimeout(function () {
+            that.$switch('./index')
+          }, 2000)
         }
         that.$apply()
       })

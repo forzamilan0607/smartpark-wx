@@ -35,6 +35,7 @@ export default class extends wepy.app {
       'pages/login',
       'pages/myOrder',
       'pages/visitorOrder',
+      'pages/visitorOrder1',
       'pages/orderAuthorize',
       'pages/orderInfo',
       'pages/doorList',
@@ -110,7 +111,7 @@ export default class extends wepy.app {
                     duration: 2000
                   })
                 }, 2000)
-                wepy.$redirect({
+                wx.redirectTo({
                   url: './register'
                 })
                 console.log('未注册用户')
