@@ -122,6 +122,7 @@
       that.start = options.startTime
       that.end = options.endTime
       that.id = options.id
+      that.$apply()
     }
 
     onShow () {
@@ -159,6 +160,7 @@
           that.$apply()
         }
       })
+      that.$apply()
     }
   }
 </script>

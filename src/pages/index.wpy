@@ -95,6 +95,61 @@ export default class Menus extends wepy.page {
   }
 
   onLoad() {
+    wx.login({
+      success (data) {
+        console.log(data)
+        if (data.code) {
+          // 发起网络请求
+          console.log(data.code)
+          const appid = 'wx2543cd2140b815b1'
+          const secret = '2b530219c5266ffe918650556b74889c'
+          wepy.request({
+            url: `https://sp.handcode.cn/app/appEnter`,
+            method: 'POST',
+            data: {
+              appId: appid,
+              secret: secret,
+              jsCode: data.code,
+              grantType: 'authorization_code'
+            },
+            success: res => {
+              console.log(res, 2222)
+              if (res.data.code === 500) {
+                return false
+              } else if (res.data.code === 510) {
+                wepy.setStorageSync('openid', res.data.openid)
+                setTimeout(function() {
+                  wepy.showToast({
+                    title: '未注册用户请先注册',
+                    icon: 'none',
+                    duration: 2000
+                  })
+                }, 2000)
+                wx.redirectTo({
+                  url: './register'
+                })
+                console.log('未注册用户')
+              } else {
+                console.log('已注册用户')
+                wepy.setStorageSync('openid', res.data.openid)
+                wepy.setStorageSync('token', res.data.token)
+                wepy.setStorageSync('menus', res.data.menus)
+                wepy.setStorageSync('roleId', res.data.roleId)
+                wx.switchTab({
+                  url: './index'
+                })
+              }
+            },
+            fail: res => {
+            }
+          })
+        } else {
+          this.selfToast('请先注册！' + data.errMsg, 'none')
+
+          console.log('登录失败！' + data.errMsg)
+        }
+      }
+    })
     this.menus = wepy.getStorageSync('menus')
     this.$apply()
   }

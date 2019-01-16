@@ -368,6 +368,7 @@ export default class OrderInfo extends wepy.page {
           url: './index'
         }), 1000)
       })
+      that.$apply()
     },
 
     // 提交
@@ -522,6 +523,8 @@ export default class OrderInfo extends wepy.page {
     data.multiArray[2] = minute
 
     this.setData(data)
+    this.data = data
+    this.$apply()
   }
 
   bindMultiPickerColumnChange (e) {
@@ -585,6 +588,8 @@ export default class OrderInfo extends wepy.page {
     data.multiArray[1] = hours
     data.multiArray[2] = minute
     this.setData(data)
+    this.data = data
+    this.$apply()
   }
 
   loadData (hours, minute) {

@@ -193,6 +193,7 @@
             that.selfToast(res.data.msg, 'none', 2000)
           }
         })
+        that.$apply()
       },
 
       code() {

@@ -428,6 +428,7 @@
           that.form.carInfoEntitys[0].name = ''
           that.form.carInfoEntitys[0].phone = ''
         }
+        that.$apply()
       },
 
       // photo
@@ -442,6 +443,7 @@
             console.log(res)
           }
         })
+        that.$apply()
       },
 
       // chooseDate
@@ -507,6 +509,7 @@
             }
           })
         }
+        that.$apply()
       },
 
       // focus
@@ -649,6 +652,7 @@
             that.selfToast('预约失败，请联系管理员！', 'none')
           }
         })
+        that.$apply()
       }
     }
 
@@ -656,6 +660,7 @@
       this.form.appointStartTime = this.addHour4CurDate(0)
       this.form.appointEndTime = this.addHour4CurDate(3)
       this.form.companions = 0
+      this.$apply()
     }
 
     addHour4CurDate (hours) {
@@ -702,6 +707,8 @@
       data.multiArray[2] = minute
 
       this.setData(data)
+      this.data = data
+      this.$apply()
     }
 
     bindMultiPickerColumnChange (e) {
@@ -761,6 +768,8 @@
       data.multiArray[1] = hours
       data.multiArray[2] = minute
       this.setData(data)
+      this.data = data
+      this.$apply()
     }
 
     loadData (hours, minute) {

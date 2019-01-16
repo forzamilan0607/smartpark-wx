@@ -207,6 +207,7 @@
         let that = this
         // that.setData( { currentTab: e.detail.current })
         that.currentTab = e.detail.current
+        that.$apply()
       },
 
       /**
@@ -219,6 +220,7 @@
         } else {
           that.currentTab = e.target.dataset.current
         }
+        that.$apply()
       },
 
       Approve (id) {
@@ -257,6 +259,7 @@
           that.winHeight = res.windowHeight
         }
       })
+      that.$apply()
     }
   }
 </script>
