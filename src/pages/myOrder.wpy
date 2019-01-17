@@ -26,6 +26,16 @@
     display: flex;
     padding: 18rpx 0;
     /**border-bottom: 1px solid #f4f4f4;**/
+    .bujinqi {
+      flex: 2;
+      text-align: right;
+      .text {
+        width: 50rpx;
+        text-align: center;
+        border: 1px solid #f6f6f6;
+        display: inline-block;
+      }
+    }
     text {
       flex: 1;
       font-size: 14px;
@@ -187,7 +197,7 @@
 
       <view class="inputGroup">
         <text>来访事由：</text>
-        <input class="input" placeholder="必填" value="{{remark}}" bindinput="bindInput('remark')"/>
+        <input class="input" placeholder="必填" value="{{form.remark}}" disabled bindinput="bindInput('remark')" bindtap="action"/>
       </view>
     </view>
    
@@ -196,18 +206,18 @@
       <view class="title">访客信息</view>
       <view class="inputGroup">
         <text>姓名：</text>
-        <input class="input" placeholder="必填" value="{{name}}" bindinput="bindInput('name')" bindblur="fillCarInfo('name')"/>
+        <input class="input" placeholder="必填" value="{{form.name}}" bindinput="bindInput('name')" bindblur="fillCarInfo('name')"/>
       </view>
 
       <view class="inputGroup">
         <text class="mobile">身份证：</text>
-        <input class="input mobileInput" placeholder="必填" value="{{idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
+        <input class="input mobileInput" placeholder="必填" value="{{form.idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
         <text class="getCode" @tap="photo">点击拍照</text>
       </view>
 
       <view class="inputGroup">
         <text class="mobile">手机号：</text>
-        <input class="input mobileInput" placeholder="必填" value="{{phone}}" bindinput="bindInput('phone')" bindblur="fillCarInfo('phone')"/>
+        <input class="input mobileInput" placeholder="必填" value="{{form.phone}}" bindinput="bindInput('phone')" bindblur="fillCarInfo('phone')"/>
         <text class="getCode" @tap="getCode">{{text}}验证码</text>
       </view>
 
@@ -216,9 +226,13 @@
         <input class="input" placeholder="必填" value="{{form.verifyCode}}" bindinput="bindInput('verifyCode')"/>
       </view>
 
-      <view class="inputGroup">
+      <view class="inputGroup Group">
         <text>来访人数：</text>
-        <input class="input" placeholder="选填" type="number" value="{{companions}}" bindinput="bindInput('companions')"/>
+        <view class="bujinqi">
+          <text type="text" class="text" bindtap="jian">-</text>
+          <text type="text" class="text">{{form.companions}}</text>
+          <text type="text" class="text" bindtap="add">+</text>
+        </view>
       </view>
     </view>
 
@@ -340,6 +354,34 @@
     }
 
     methods = {
+      jian () {
+        if (this.form.companions === 1) {
+          return false
+        } else {
+          this.form.companions--
+          this.$apply()
+        }
+      },
+      add () {
+        this.form.companions++
+        this.$apply()
+      },
+      action () {
+        let that = this
+        // 底部Action
+        wepy.showActionSheet({
+          itemList: ['开会', '办公', '出差', '其他'],
+          success(res) {
+            console.log(res.tapIndex)
+            const itemList = ['开会', '办公', '出差', '其他']
+            that.form.remark = itemList[res.tapIndex]
+            that.$apply()
+          },
+          fail(res) {
+            console.log(res.errMsg)
+          }
+        })
+      },
       // input
       bindInput (val, e) {
         this.form[val] = e.detail.value
@@ -417,6 +459,7 @@
         if (that.sameWithVisitor) {
           val === 'name' ? that.form.carInfoEntitys[0].name = e.detail.value : that.form.carInfoEntitys[0].phone = e.detail.value
         }
+        that.$apply()
       },
       switchChangeCar (e) {
         let that = this
@@ -498,10 +541,6 @@
                     })
                   }
                 }
-                that.setData({
-                  name: visitor.name,
-                  phone: visitor.phone
-                })
                 that.$apply()
               }
             } else {
@@ -659,7 +698,7 @@
     onLoad () {
       this.form.appointStartTime = this.addHour4CurDate(0)
       this.form.appointEndTime = this.addHour4CurDate(3)
-      this.form.companions = 0
+      this.form.companions = 1
       this.$apply()
     }
 
@@ -767,7 +806,6 @@
       }
       data.multiArray[1] = hours
       data.multiArray[2] = minute
-      this.setData(data)
       this.data = data
       this.$apply()
     }
@@ -884,7 +922,8 @@
         monthDay = that.convertTime(month) + '-' + that.convertTime(day)
       }
       var startDate = date.getFullYear() + '-' + monthDay + ' ' + that.convertTime(hours) + ':' + that.convertTime(minute)
-      this.form[val] = startDate
+      that.form[val] = startDate
+      that.$apply()
     }
   }
 </script>
