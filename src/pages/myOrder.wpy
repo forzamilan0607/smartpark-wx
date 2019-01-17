@@ -28,7 +28,6 @@
     /**border-bottom: 1px solid #f4f4f4;**/
     .bujinqi {
       flex: 2;
-      text-align: right;
       .text {
         width: 50rpx;
         text-align: center;
