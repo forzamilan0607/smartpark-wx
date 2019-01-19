@@ -73,15 +73,16 @@ page {
   height: 100%;
   top: 0;
   left: 0;
-  background: #00000080;
-.searchView {
+  box-sizing: border-box;
+  background: #000;
+  opacity: .9;
+  .searchView {
     z-index: 111;
     padding: 40rpx;
     width: 70%;
     border-radius: 20rpx;
     background-color: #fff;
-    margin: 300rpx auto;
-    display: flex;
+    margin: 400rpx auto 10rpx auto;
     input {
       /**border-bottom: 1px solid #f4f4f4;**/
       width: 100%;
@@ -89,16 +90,20 @@ page {
       text-align: center;
       color: #666;
     }
-  .basestaff {
-      margin-top: 20rpx;
-      font-size: 14px;
-      text-align: center;
-      color: #333;
-      line-height: 60rpx;
-    }
   }
 }
-
+.choose2 {
+  background:#fff;
+  height:60rpx;
+  line-height:60rpx;
+  font-size:16px;
+  text-align:center;
+  color:#00479D;
+  border-radius:20rpx;
+  width:50%;
+  margin:30rpx auto;
+  font-weight: 600;
+}
 .choose {
   background: #fff;
   height: 60rpx;
@@ -146,12 +151,28 @@ page {
 
 <template>
 <view class="main">
-  <view class="chooseGroup">
-    <view class="choose" @tap="submit" wx:if="{{roleId == 2 && status == 1}}">授权</view>
-    <view class="choose choose1" @tap="reject" wx:if="{{roleId == 2 && status == 1}}">拒绝</view>
+  <view class="chooseGroup" wx:if="{{roleId == 2 && status == 1}}">
+    <view class="choose" @tap="submit" >授权</view>
+    <view class="choose choose1" @tap="reject" >拒绝</view>
   </view>
 
-  <!-- 被访人信息 -->    
+  <!-- 预约单信息 -->
+  <view class="module">
+    <view class="title">预约单信息</view>
+    <view class="inputGroup">
+      <text>预约单号：</text>
+      <input class="input" value="{{form.reservationNo}}" disabled />
+    </view>
+    <view class="inputGroup">
+      <text>状态：</text>
+      <input class="input" value="{{statusMap[form.status]}}" disabled />
+    </view>
+    <view class="inputGroup" wx:if="{{form.status === '2'}}">
+      <text>不通过原因：</text>
+      <input class="input" value="{{form.rejectReason}}" disabled />
+    </view>
+  </view>
+  <!-- 被访人信息 -->
   <view class="module">
     <view class="title">被访人信息</view>
 
@@ -190,7 +211,7 @@ page {
 
     <view class="inputGroup">
       <text>来访事由：</text>
-      <input class="input" placeholder="选填" disabled value="{{form.remark}}" bindinput="bindInput('remark')"/>  
+      <input class="input" placeholder="选填" disabled value="{{form.remark}}" bindinput="bindInput('remark')"/>
     </view>
   </view>
 
@@ -219,10 +240,10 @@ page {
   </view>
 
   <!-- 车辆信息 -->
-  <view class="module">
+  <view class="module" wx:if="{{carCard}}">
     <view class="title">车辆信息</view>
 
-    <view class="carCard" wx:if="{{carCard}}" wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
+    <view class="carCard"  wx:for="{{form.carInfoEntitys}}" wx:key="{{item.carNo}}">
 
     <view class="inputGroup">
       <text style="text-align: left;">车辆{{index + 1}}:</text>
@@ -245,14 +266,14 @@ page {
   </view>
 </view>
 
-  
+
 
   <!-- mark -->
   <view class="mark" wx:if="{{search}}" @tap="mark">
-  <view class="searchView" catchtap="catch">
-  <input value="{{ rejectReaon }}" placeholder="请输入拒绝原因" bindinput="checkMobile"/>
-  <view class="choosee choose" catchtap="choose">确定</view>
-  </view>
+    <view class="searchView" catchtap="catch">
+      <input style="color:#1c5aa5;" value="{{ rejectReaon }}" placeholder="请输入拒绝原因" bindinput="checkMobile"/>
+    </view>
+    <view class="choose2" catchtap="choose">确定</view>
   </view>
 
   <!-- <camera wx:if="{{camera}}" device-position="back" binderror="error" style="width:80%;height:200px;position:fixed;top:100px;left:54rpx;z-index:1000;padding:10px;"></camera> -->
@@ -286,6 +307,7 @@ export default class OrderInfo extends wepy.page {
     startDay: '',     // 日期选择器开始时间
     text: '发送',
     form: {
+      reservationNo: '',      // 预约单号
       name: '',               // 访客姓名
       phone: '',              // 访客手机号
       staffName: '',          // 受访者姓名
@@ -297,6 +319,8 @@ export default class OrderInfo extends wepy.page {
       remark: '',             // 访客事由
       appointStartTime: '',   // 开始时间
       appointEndTime: '',     // 结束时间
+      rejectReason: '',       // 审核拒绝原因
+      status: '',             // 状态
       visitorIdcardEntity: {         // 访客身份信息表
         address: '',                 // 访客身份信息表
         effDate: '',                 // 证件生效时间
@@ -320,7 +344,14 @@ export default class OrderInfo extends wepy.page {
     carCard: true,    // 开关
     id: '',
     multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
-    multiIndex: [0, 0, 0]
+    multiIndex: [0, 0, 0],
+    statusMap: {
+      '1': '待审核',
+      '2': '审核不通过',
+      '3': '审核通过',
+      '4': '已完成',
+      '5': '已过期'
+    }
   }
 
   methods = {
@@ -480,6 +511,7 @@ export default class OrderInfo extends wepy.page {
     this.getVisitorInfo(this.id).then(data => {
       console.log(data)
       this.form = data.data.data
+      this.carCard = this.form.carInfoEntitys.length > 0
       this.$apply()
       console.log(this.form, 'form')
     })

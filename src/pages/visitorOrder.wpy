@@ -2,7 +2,7 @@
   page {
     background-color: #f7f7f7;
     padding: 20rpx;
-    box-sizing: border-box;    
+    box-sizing: border-box;
   }
   .order {
     background-color: #fff;
@@ -93,6 +93,10 @@
         margin-left: 50rpx;
         border-radius: 10rpx;
       }
+      .shenpi {
+        background-color: #00479D;
+        color: #fff;
+      }
     }
   }
 
@@ -125,7 +129,7 @@
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
       <swiper-item wx:for="{{[1,2,3,4,5]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
-          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{item.status == currentTab}}" @tap="notApprove('{{item.id}}')">
+          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{item.status == currentTab}}" >
             <view class="order">
               <view class="cardNo">
                 <text>预约单号：</text>{{item.reservationNo}}
@@ -142,6 +146,9 @@
                 <view class="interviewee">{{item.staffName}}</view>
               </view>
               <view class="time"><text>来访时间：</text>{{item.appointStartTime}}</view>
+              <view class="bottom">
+                <view @tap="viewVisitorOrder('{{item.id}}','{{item.status}}')" class="shenpi" >查看</view>
+              </view>
             </view>
 
             <view style="margin:50% auto 50% auto; color: blue; height: 500px; text-align: center;" wx:if="{{list.length == 0}}">暂无预约单！</view>
@@ -185,7 +192,7 @@
 
     methods = {
       // 查看
-      notApprove (id) {
+      viewVisitorOrder (id) {
         this.$navigate({
           url: `./orderInfo?id=${id}&type=1`
         })
@@ -212,13 +219,8 @@
           this.currentTab = Number(cur)
         }
         this.$apply()
-      },
-
-      Approve (id) {
-        this.$navigate({
-          url: `./orderInfo?id=${id}&title=title`
-        })
       }
+
     }
 
     // 判断当前滚动超过一屏时，设置tab标题滚动条。

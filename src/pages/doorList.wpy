@@ -12,17 +12,23 @@
  }
 
   .choose {
-    background: #00479D;
     height: 50rpx;
     line-height: 50rpx;
     font-size: 14px;
     text-align: center;
-    color: #fff;
     border-radius: 10rpx;
     width: 30%;
     margin: 40rpx auto;
     display: inline-block;
     margin-left: 11%;
+  }
+  .approve {
+    background-color: #00479D;
+    color: #fff;
+  }
+  .reject {
+    color: #fff;
+    background-color: #ed4444;
   }
   .item {
     padding-left: 45rpx;
@@ -44,8 +50,8 @@
           </label>
       </label>
     </checkbox-group>
-    <view class="choose" catchtap="sure">确认</view>
-    <view class="choose" catchtap="cancel">取消</view>
+    <view class="choose approve" catchtap="sure">确认</view>
+    <view class="choose reject" catchtap="cancel">取消</view>
   </view>
 </template>
 

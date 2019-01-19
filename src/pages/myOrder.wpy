@@ -199,7 +199,7 @@
         <input class="input" placeholder="必填" value="{{form.remark}}" disabled bindinput="bindInput('remark')" bindtap="action"/>
       </view>
     </view>
-   
+
     <!-- 访客信息 -->
     <view class="module">
       <view class="title">访客信息</view>
@@ -413,8 +413,7 @@
           // 先验证手机号是否正确
           const mobile = that.form.phone
           console.log(mobile)
-          if (!that.checkMobile(mobile).result) {
-            that.selfToast('请输入正确的手机号', 'none')
+          if (!that.checkMobile(mobile).result) {           that.selfToast('请输入正确的手机号', 'none')
             return false
           }
           that.getVerifyCode(mobile, 'SMS_150172084').then(res => {

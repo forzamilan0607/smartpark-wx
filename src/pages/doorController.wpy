@@ -112,7 +112,13 @@
           doorId: id
         }
         that.openDoor(param).then(res => {
-          console.log(res)
+          if (res.data.code === 200) {
+            that.selfToast('开门成功', 'success')
+          } else {
+            console.log('开门异常！' + res)
+            that.selfToast('开门失败！请联系管理员！', 'none')
+          }
+          that.$apply()
         })
       },
 
@@ -158,6 +164,9 @@
         if (res.data.code === 200) {
           that.privateDoorControllers = res.data.privateDoorControllers
           that.publicDoorControllers = res.data.publicDoorControllers
+          if (!that.privateDoorControllers.length && !that.publicDoorControllers.length) {
+            that.selfToast('门禁数据未授权！', 'none')
+          }
           that.$apply()
         }
       })

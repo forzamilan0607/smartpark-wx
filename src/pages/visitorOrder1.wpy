@@ -2,7 +2,7 @@
   page {
     background-color: #f7f7f7;
     padding: 20rpx;
-    box-sizing: border-box;    
+    box-sizing: border-box;
   }
   .order {
     background-color: #fff;
@@ -134,7 +134,7 @@
     <swiper class="tab-content" current="{{currentTab}}" duration="300" @change="switchTab" style="height:{{winHeight}}rpx">
       <swiper-item wx:for="{{[0,1,2,3,4]}}" wx:key="index">
         <scroll-view scroll-y="true" class="scoll-h" >
-          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) == currentTab}}" @tap="notApprove('{{item.id}}','{{item.status}}')">
+          <view wx:for="{{list}}" wx:key="{{id}}" wx:if="{{(item.status - 1) == currentTab}}" >
             <view class="order">
               <view class="cardNo">
                 <text>预约单号：</text>{{item.reservationNo}}
@@ -153,7 +153,7 @@
               <view class="time"><text>来访时间：</text>{{item.appointStartTime}}</view>
               <view class="bottom">
                 <view @tap="Approve('{{item.id}}','{{item.status}}')" class="shenpi" wx:if="{{item.status === '1'}}">审批</view>
-                <view @tap="notApprove('{{item.id}}','{{item.status}}')" class="not" wx:if="{{item.status === '1'}}">拒绝</view>
+                <view @tap="viewVisitorOrder('{{item.id}}','{{item.status}}')" class="shenpi" wx:if="{{item.status !== '1'}}">查看</view>
               </view>
             </view>
 
@@ -198,7 +198,7 @@
 
     methods = {
       // 查看
-      notApprove (id, status) {
+      viewVisitorOrder (id, status) {
         this.$navigate({
           url: `./orderInfo?id=${id}&status=${status}`
         })
