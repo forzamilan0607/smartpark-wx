@@ -255,9 +255,6 @@
         console.log(that.list.length)
         if (!that.list || !that.list.length) {
           that.selfToast('您当前还没有预约单', 'none')
-          setTimeout(function () {
-            that.$switch('./index')
-          }, 2000)
         }
         that.$apply()
       })

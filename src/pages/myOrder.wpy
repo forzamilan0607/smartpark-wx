@@ -45,6 +45,8 @@
     .input {
       flex: 2;
       font-size: 14px;
+      height: 50rpx;
+      line-height: 50rpx;
     }
     switch {
       flex: 2;
