@@ -44,7 +44,8 @@
 
     <view class="logout">车辆信息</view>
 
-    <view class="logout" wx:if="{{roleId === 2}}">日志管理</view>
+  <view class="logout" wx:if="{{roleId === 2}}">日志管理</view>
+  <view class="logout" @tap="showVersion">版本号</view>
 
     <view class="logout" @tap="logout">退出登录</view>
   </view>
@@ -76,6 +77,14 @@
         wepy.setStorageSync('roleId', '')
         this.$redirect({
           url: './register'
+        })
+      },
+      showVersion () {
+        wx.showModal({
+          title: '版本信息',
+          content: '1.0.8',
+          success: function(res) {
+          }
         })
       }
     }

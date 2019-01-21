@@ -96,6 +96,7 @@ export default class Menus extends wepy.page {
   }
 
   onLoad() {
+    let that = this
     wx.login({
       success (data) {
         console.log(data)
@@ -136,9 +137,8 @@ export default class Menus extends wepy.page {
                 wepy.setStorageSync('token', res.data.token)
                 wepy.setStorageSync('menus', res.data.menus)
                 wepy.setStorageSync('roleId', res.data.roleId)
-                wx.switchTab({
-                  url: './index'
-                })
+                that.menus = wepy.getStorageSync('menus')
+                that.$apply()
               }
             },
             fail: res => {
@@ -151,8 +151,7 @@ export default class Menus extends wepy.page {
         }
       }
     })
-    this.menus = wepy.getStorageSync('menus')
-    this.$apply()
+
   }
 
   onShow() {
