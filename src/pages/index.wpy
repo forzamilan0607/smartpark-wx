@@ -120,13 +120,6 @@ export default class Menus extends wepy.page {
                 return false
               } else if (res.data.code === 510) {
                 wepy.setStorageSync('openid', res.data.openid)
-                setTimeout(function() {
-                  wepy.showToast({
-                    title: '未注册用户请先注册',
-                    icon: 'none',
-                    duration: 2000
-                  })
-                }, 2000)
                 wx.redirectTo({
                   url: './register'
                 })
