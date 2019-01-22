@@ -115,13 +115,13 @@
 
   .choose {
     background:#fff;
-    height:60rpx;
-    line-height:60rpx;
+    height:80rpx;
+    line-height:80rpx;
     font-size:16px;
     text-align:center;
     color:#00479D;
     border-radius:20rpx;
-    width:50%;
+    width:60%;
     margin:30rpx auto;
     font-weight: 600;
   }
@@ -213,7 +213,7 @@
       <view class="inputGroup">
         <text class="mobile">身份证：</text>
         <input class="input mobileInput" placeholder="必填" value="{{form.idcardNo}}" bindinput="bindInput('idcardNo')" bindblur="autoFillIdcardInfo" />
-        <text class="getCode" @tap="photo">点击拍照</text>
+        <text class="getCode" style="color: #b9b9b9">点击拍照</text>
       </view>
 
       <view class="inputGroup">
@@ -323,7 +323,7 @@
         isAddCarInfo: '',       // 是否添加同行车辆
         companions: '',         // 同行人数
         idcardNo: '',           // 访客身份证号码
-        remark: '',             // 访客事由
+        remark: '办公',             // 访客事由
         appointStartTime: '',   // 开始时间
         appointEndTime: '',     // 结束时间
         visitorIdcardEntity: {         // 访客身份信息表
@@ -371,7 +371,7 @@
         let that = this
         // 底部Action
         wepy.showActionSheet({
-          itemList: ['开会', '办公', '出差', '其他'],
+          itemList: ['办公', '开会', '出差', '其他'],
           success(res) {
             console.log(res.tapIndex)
             const itemList = ['开会', '办公', '出差', '其他']
@@ -415,7 +415,8 @@
           // 先验证手机号是否正确
           const mobile = that.form.phone
           console.log(mobile)
-          if (!that.checkMobile(mobile).result) {           that.selfToast('请输入正确的手机号', 'none')
+          if (!that.checkMobile(mobile).result) {
+            that.selfToast('请输入正确的手机号', 'none')
             return false
           }
           that.getVerifyCode(mobile, 'SMS_150172084').then(res => {
