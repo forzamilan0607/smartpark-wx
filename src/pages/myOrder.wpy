@@ -269,7 +269,7 @@
         </view>
         <view wx:if="{{index == 0}}" class="inputGroup">
           <text>与访客一致：</text>
-          <switch bindchange="switchChangeCar"/>
+          <switch checked bindchange="switchChangeCar"/>
         </view>
       </view>
     </view>
