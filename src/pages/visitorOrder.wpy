@@ -170,7 +170,7 @@
     config = {
       navigationBarTitleText: '预约',
       navigationBarBackgroundColor: '#00479D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
     }
 
     mixins = [api, toastMixin, utilMixin]

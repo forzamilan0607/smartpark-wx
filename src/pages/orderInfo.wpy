@@ -355,7 +355,6 @@ export default class OrderInfo extends wepy.page {
       '5': '已过期'
     }
   }
-
   methods = {
     // input
     bindInput (val, e) {
@@ -365,7 +364,13 @@ export default class OrderInfo extends wepy.page {
       this.$apply()
       console.log(this.form[val])
     },
-
+    onPageScroll ( e ) {
+      if( e.scrollTop < 0 ) {
+        wx.pageScrollTo({
+          scrollTop: 0
+        })
+      }
+    },
     bindInputCar (val, e) {
       console.log(e, val)
       console.log(val)

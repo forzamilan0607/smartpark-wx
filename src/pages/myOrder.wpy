@@ -374,7 +374,7 @@
           itemList: ['办公', '开会', '出差', '其他'],
           success(res) {
             console.log(res.tapIndex)
-            const itemList = ['开会', '办公', '出差', '其他']
+            const itemList = ['办公', '开会', '出差', '其他']
             that.form.remark = itemList[res.tapIndex]
             that.$apply()
           },
