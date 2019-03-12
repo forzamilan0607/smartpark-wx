@@ -40,7 +40,8 @@ export default class extends wepy.app {
       'pages/orderInfo',
       'pages/doorList',
       'pages/my',
-      'pages/doorController'
+      'pages/doorController',
+      'pages/staffSearchCar'
     ],
     window: {
       backgroundTextStyle: 'light',

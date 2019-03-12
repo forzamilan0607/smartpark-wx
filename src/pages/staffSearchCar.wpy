@@ -1,0 +1,50 @@
+<style lang="less">
+  page {
+    padding: 20rpx;
+  }
+</style>
+
+<template>
+  <view>
+    <web-view src="https://wxydt.yidianting.xin/p3506" />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import utilMixin from '../mixins/util'
+  import toastMixin from '../mixins/toast'
+  import api from '../mixins/api'
+
+  export default class DoorList extends wepy.page {
+    config = {
+      navigationBarTitleText: '一点停',
+      navigationBarBackgroundColor: '#00479D',
+      navigationBarTextStyle: 'white'
+    }
+
+    mixins = [api, toastMixin, utilMixin]
+
+    data = {
+      list: [],
+      doorList: [],
+      start: '',
+      end: '',
+      id: ''
+    }
+
+    methods = {
+      demo: function(e) {
+      }
+    }
+
+    onLoad (options) {
+      console.log(options)
+      this.$apply()
+    }
+
+    onShow () {
+
+    }
+  }
+</script>
